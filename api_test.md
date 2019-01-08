@@ -1,3 +1,3 @@
 # Dette er en test
 
-Versjon 8.
+Versjon 10.
