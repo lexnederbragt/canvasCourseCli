@@ -21,29 +21,21 @@ def get_API(config, canvas_instance, course_code, config_file_name):
     try:
         API_URL = config['api_url'][canvas_instance]
     except KeyError:
-        sys.exit("Error: could not find the entry for Canvas instance '%s' in the 'api_url' section of the config file %s." % (canvas_instance, config_file_name))
+        sys.exit("Error: could not find the entry for Canvas instance '%s' in the 'api_url' section of the config file '%s'." % (canvas_instance, config_file_name))
 
     # Course ID
     try:
         course_id = config[course_code]['course_id']
     except KeyError:
-        sys.exit("Error: could not find the 'course_id' entry in for course code '%s' in the 'courses' section of the config file %s." % (course_code, config_file_name))
+        sys.exit("Error: could not find the 'course_id' entry in for course code '%s' in the 'courses' section of the config file '%s'." % (course_code, config_file_name))
 
     # Canvas API key
     try:
         API_KEY = config[course_code]['api_key']
     except KeyError:
-        sys.exit("Error: could not find the 'api-key' entry for course code '%s' in the 'courses' section of the config file %s." % (course_code, config_file_name))
+        sys.exit("Error: could not find the 'api-key' entry for course code '%s' in the 'courses' section of the config file '%s'." % (course_code, config_file_name))
 
     return API_URL, API_KEY, course_id
-
-# these will become command line parameters
-#canvas_instance = 'uio'
-#course_code = 'bios1100'
-#html_to_send = 'api_test.html'
-#title_for_page = 'Testing Canvas API'
-# canvas uses the page title in lower case with dashes for spaces as url for the page
-#url_for_page = 'testing-canvas-api' # title_for_page.lower().replace(' ','-')
 
 import argparse
 # help text and argument parser
@@ -73,14 +65,18 @@ canvas = Canvas(API_URL, API_KEY)
 course = canvas.get_course(course_id)
 
 # read new content
-with open(args.html_file    , 'r') as html_file:
+with open(args.html_file, 'r') as html_file:
     html_content = html_file.read()#.replace('\n', '')
 
 # get the course page
 try:
     page_to_update = course.get_page(args.url)
 except:
-    sys.exit("Error: could not find page '%s' on Canvas for updating." % args.url)
+    sys.exit("Error: could not find page '%s' on Canvas for updating.\nFull url: %s" % (args.url, full_page_url))
+
+# test for whether the existing page is identical to the new html file
+if page_to_update.body.split("\n")[:-1] == html_content.split("\n")[:-1]:
+    print("It seems the content of the html file '%s' is identical to the current page on canvas. The update may not result in any change." % args.html_file)
 
 # update the course page
 api_call_result = page_to_update.edit(wiki_page = {"title":page_to_update.title, "body":html_content})
@@ -89,3 +85,8 @@ api_call_result = page_to_update.edit(wiki_page = {"title":page_to_update.title,
 # in which case the first part of the api_call_result is the updated html
 if html_content in api_call_result.body:
     print("Sucessfully updated page "+ full_page_url)
+
+
+# title_for_page = 'Testing Canvas API'
+# canvas uses the page title in lower case with dashes for spaces as url for the page
+# url_for_page = 'testing-canvas-api' # title_for_page.lower().replace(' ','-')
