@@ -60,11 +60,11 @@ parser.add_argument("course_code", help="The relevant course code as defined in 
 parser.add_argument("url", help="The last part of the url of the page to de updated, the part following '/pages/'")
 parser.add_argument("html_file", help="The name of the html file that will be sent to Canvas")
 parser.add_argument("-c", "--config_file", help="Path to config file")
-parser.add_argument("-s", "--show_config", help="Show the content of the config file", action="store_true")
+parser.add_argument("-c", "--config_file", help="Path to config file", default = '~/.config/canvasapi.conf')
 args = parser.parse_args()
 
-# load configuration seettings
-config = read_config(config_file)
+# load configuration settings
+config = read_config(args.config_file)
 API_URL, API_KEY, course_id = get_API(config, args.instance, args.course_code)
 
 # set some variables needed later on
