@@ -39,16 +39,18 @@ def get_API(config, canvas_instance, course_code, config_file_name):
 
 import argparse
 # help text and argument parser
+# solution based on https://stackoverflow.com/a/24181138/462692
 desc = '\n'.join(["To be added.",
                  "Add note about default config file '~/.config/canvasapi.conf'"
                  "An optional argument -c/--config_file can be used with the path to the config file."
                   ])
 parser = argparse.ArgumentParser(description=desc)
-parser.add_argument("instance", help="The name of the Canvas instance as defined in the config file")
-parser.add_argument("course_code", help="The relevant course code as defined in the config file")
-parser.add_argument("url", help="The last part of the url of the page to de updated, the part following '/pages/'")
-parser.add_argument("html_file", help="The name of the html file that will be sent to Canvas")
-parser.add_argument("-c", "--config_file", help="Path to config file", default = '~/.config/canvasapi.conf')
+required_named = parser.add_argument_group('required named arguments')
+required_named.add_argument("-i", "--instance", help="The name of the Canvas instance as defined in the config file", required = True)
+required_named.add_argument("-c", "--course_code", help="The relevant course code as defined in the config file", required = True)
+required_named.add_argument("-u", "--url", help="The last part of the url of the page to de updated, the part following '/pages/'", required = True)
+required_named.add_argument("-f", "--html_file", help="The name of the html file that will be sent to Canvas", required = True)
+parser.add_argument("-cf", "--config_file", help="Path to config file", default = '~/.config/canvasapi.conf')
 args = parser.parse_args()
 
 # load configuration settings
