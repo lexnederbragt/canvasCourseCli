@@ -12,7 +12,7 @@ def read_config(config_file):
         sys.exit("Error: could not open config file or config file was empty or malformed: " + config_file)
     return config
 
-def get_API(config, canvas_instance, course_code):
+def get_API(config, canvas_instance, course_code, config_file_name):
     """
     Parse config file
     Extract correct API information
@@ -21,19 +21,19 @@ def get_API(config, canvas_instance, course_code):
     try:
         API_URL = config['api_url'][canvas_instance]
     except KeyError:
-        sys.exit("Error: could not find the entry for Canvas instance '%s' in the 'api_url' section of the config file %s." % (canvas_instance, args.config_file))
+        sys.exit("Error: could not find the entry for Canvas instance '%s' in the 'api_url' section of the config file %s." % (canvas_instance, config_file_name))
 
     # Course ID
     try:
         course_id = config[course_code]['course_id']
     except KeyError:
-        sys.exit("Error: could not find the 'course_id' entry in for course code '%s' in the 'courses' section of the config file %s." % (course_code, args.config_file))
+        sys.exit("Error: could not find the 'course_id' entry in for course code '%s' in the 'courses' section of the config file %s." % (course_code, config_file_name))
 
     # Canvas API key
     try:
         API_KEY = config[course_code]['api_key']
     except KeyError:
-        sys.exit("Error: could not find the 'api-key' entry for course code '%s' in the 'courses' section of the config file %s." % (course_code, args.config_file))
+        sys.exit("Error: could not find the 'api-key' entry for course code '%s' in the 'courses' section of the config file %s." % (course_code, config_file_name))
 
     return API_URL, API_KEY, course_id
 
@@ -61,7 +61,7 @@ args = parser.parse_args()
 
 # load configuration settings
 config = read_config(args.config_file)
-API_URL, API_KEY, course_id = get_API(config, args.instance, args.course_code)
+API_URL, API_KEY, course_id = get_API(config, args.instance, args.course_code, args.config_file)
 
 # set some variables needed later on
 full_page_url = '/'.join([API_URL, 'courses', course_id, 'pages', args.url])
