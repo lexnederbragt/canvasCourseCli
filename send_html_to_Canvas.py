@@ -21,26 +21,23 @@ def get_API(config, canvas_instance, course_code):
     try:
         API_URL = config['api_url'][canvas_instance]
     except KeyError:
-        print("Error: could not find the entry for Canvas instance '%s' in the 'api_url' section of the config file." %canvas_instance)
+        sys.exit("Error: could not find the entry for Canvas instance '%s' in the 'api_url' section of the config file %s." % (canvas_instance, args.config_file))
 
     # Course ID
     try:
         course_id = config[course_code]['course_id']
     except KeyError:
-        print("Error: could not find the 'course_id' entry in for course code '%s' in the 'courses' section of the config file." %course_code)
-        exit(0)
+        sys.exit("Error: could not find the 'course_id' entry in for course code '%s' in the 'courses' section of the config file %s." % (course_code, args.config_file))
 
     # Canvas API key
     try:
         API_KEY = config[course_code]['api_key']
     except KeyError:
-        print("Error: could not find the 'api-key' entry for course code '%s' in the 'courses' section of the config file." %course_code)
-        exit(0)
+        sys.exit("Error: could not find the 'api-key' entry for course code '%s' in the 'courses' section of the config file %s." % (course_code, args.config_file))
 
     return API_URL, API_KEY, course_id
 
 # these will become command line parameters
-config_file = '~/.config/canvasapi.conf' # default
 #canvas_instance = 'uio'
 #course_code = 'bios1100'
 #html_to_send = 'api_test.html'
@@ -59,7 +56,6 @@ parser.add_argument("instance", help="The name of the Canvas instance as defined
 parser.add_argument("course_code", help="The relevant course code as defined in the config file")
 parser.add_argument("url", help="The last part of the url of the page to de updated, the part following '/pages/'")
 parser.add_argument("html_file", help="The name of the html file that will be sent to Canvas")
-parser.add_argument("-c", "--config_file", help="Path to config file")
 parser.add_argument("-c", "--config_file", help="Path to config file", default = '~/.config/canvasapi.conf')
 args = parser.parse_args()
 
