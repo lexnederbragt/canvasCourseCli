@@ -12,28 +12,22 @@ def read_config(config_file):
         sys.exit("Error: could not open config file or config file was empty or malformed: " + config_file)
     return config
 
-def get_API(config, canvas_instance, course_code, config_file_name):
+def get_API(config, canvas_instance, course_id, config_file_name):
     """
     Parse config file
     Extract correct API information
     """
     # Canvas API URL
     try:
-        API_URL = config['api_url'][canvas_instance]
+        API_URL = config[canvas_instance]['api_url']
     except KeyError:
-        sys.exit("Error: could not find the entry for Canvas instance '%s' in the 'api_url' section of the config file '%s'." % (canvas_instance, config_file_name))
-
-    # Course ID
-    try:
-        course_id = config[course_code]['course_id']
-    except KeyError:
-        sys.exit("Error: could not find the 'course_id' entry in for course code '%s' in the 'courses' section of the config file '%s'." % (course_code, config_file_name))
+        sys.exit("Error: could not find the entry for 'api_url' in the Canvas instance '%s' section of the config file '%s'." % (canvas_instance, config_file_name))
 
     # Canvas API key
     try:
-        API_KEY = config[course_code]['api_key']
+        API_KEY = config[canvas_instance]['api_key']
     except KeyError:
-        sys.exit("Error: could not find the 'api-key' entry for course code '%s' in the 'courses' section of the config file '%s'." % (course_code, config_file_name))
+        sys.exit("Error: could not find the entry for 'api-key' in the Canvas instance '%s' section of the config file '%s'." % (canvas_instance, config_file_name))
 
     return API_URL, API_KEY, course_id
 
@@ -41,24 +35,24 @@ import argparse
 # help text and argument parser
 # solution based on https://stackoverflow.com/a/24181138/462692
 desc = '\n'.join(["To be added.",
-                 "Add note about default config file '~/.config/canvasapi.conf'"
+                 "Add note about default config file '~/.config/canvasapi.conf'.\n"
                  "An optional argument -c/--config_file can be used with the path to the config file."
                   ])
 parser = argparse.ArgumentParser(description=desc)
 required_named = parser.add_argument_group('required named arguments')
 required_named.add_argument("-i", "--instance", help="The name of the Canvas instance as defined in the config file", required = True)
-required_named.add_argument("-c", "--course_code", help="The relevant course code as defined in the config file", required = True)
-required_named.add_argument("-u", "--url", help="The last part of the url of the page to de updated, the part following '/pages/'", required = True)
+required_named.add_argument("-c", "--course_id", help="The relevant course id (number) used in the course's url, the part following '/courses/' ", required = True)
+required_named.add_argument("-p", "--page_name", help="The last part of the url of the page to be updated, the part following '/pages/'", required = True)
 required_named.add_argument("-f", "--html_file", help="The name of the html file that will be sent to Canvas", required = True)
 parser.add_argument("-cf", "--config_file", help="Path to config file", default = '~/.config/canvasapi.conf')
 args = parser.parse_args()
 
 # load configuration settings
 config = read_config(args.config_file)
-API_URL, API_KEY, course_id = get_API(config, args.instance, args.course_code, args.config_file)
+API_URL, API_KEY, course_id = get_API(config, args.instance, args.course_id, args.config_file)
 
 # set some variables needed later on
-full_page_url = '/'.join([API_URL, 'courses', course_id, 'pages', args.url])
+full_page_url = '/'.join([API_URL, 'courses', course_id, 'pages', args.page_name])
 
 # Initialize a new Canvas object
 canvas = Canvas(API_URL, API_KEY)
@@ -72,9 +66,9 @@ with open(args.html_file, 'r') as html_file:
 
 # get the course page
 try:
-    page_to_update = course.get_page(args.url)
+    page_to_update = course.get_page(args.page_name)
 except:
-    sys.exit("Error: could not find page '%s' on Canvas for updating.\nFull url: %s" % (args.url, full_page_url))
+    sys.exit("Error: could not find page '%s' on Canvas for updating.\nFull url: %s" % (args.page_name, full_page_url))
 
 # test for whether the existing page is identical to the new html file
 if page_to_update.body.split("\n")[:-1] == html_content.split("\n")[:-1]:
