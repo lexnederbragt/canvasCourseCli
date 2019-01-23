@@ -3,6 +3,7 @@ import configparser
 # Import the Canvas class
 from canvasapi import Canvas
 from canvasapi import page
+import re
 
 def read_config(config_file):
     """Load config file"""
@@ -12,24 +13,19 @@ def read_config(config_file):
         sys.exit("Error: could not open config file or config file was empty or malformed: " + config_file)
     return config
 
-def get_API(config, canvas_instance, course_id, config_file_name):
+def get_API(config, config_file_name):# canvas_instance, course_id, config_file_name):
     """
     Parse config file
-    Extract correct API information
+    Extract correct API key
     """
-    # Canvas API URL
-    try:
-        API_URL = config[canvas_instance]['api_url']
-    except KeyError:
-        sys.exit("Error: could not find the entry for 'api_url' in the Canvas instance '%s' section of the config file '%s'." % (canvas_instance, config_file_name))
 
     # Canvas API key
     try:
-        API_KEY = config[canvas_instance]['api_key']
+        API_KEY = config['uio']['api_key']
     except KeyError:
         sys.exit("Error: could not find the entry for 'api-key' in the Canvas instance '%s' section of the config file '%s'." % (canvas_instance, config_file_name))
 
-    return API_URL, API_KEY, course_id
+    return API_KEY
 
 import argparse
 # help text and argument parser
@@ -40,19 +36,20 @@ desc = '\n'.join(["To be added.",
                   ])
 parser = argparse.ArgumentParser(description=desc)
 required_named = parser.add_argument_group('required named arguments')
-required_named.add_argument("-i", "--instance", help="The name of the Canvas instance as defined in the config file", required = True)
-required_named.add_argument("-c", "--course_id", help="The relevant course id (number) used in the course's url, the part following '/courses/' ", required = True)
-required_named.add_argument("-p", "--page_name", help="The last part of the url of the page to be updated, the part following '/pages/'", required = True)
+#required_named.add_argument("-i", "--instance", help="The name of the Canvas instance as defined in the config file", required = True)
+#required_named.add_argument("-c", "--course_id", help="The relevant course id (number) used in the course's url, the part following '/courses/' ", required = True)
+#required_named.add_argument("-p", "--page_name", help="The last part of the url of the page to be updated, the part following '/pages/'", required = True)
+required_named.add_argument("-u", "--url", help="The full url of the page to be updated", required = True)
 required_named.add_argument("-f", "--html_file", help="The name of the html file that will be sent to Canvas", required = True)
 parser.add_argument("-cf", "--config_file", help="Path to config file", default = '~/.config/canvasapi.conf')
 args = parser.parse_args()
 
 # load configuration settings
 config = read_config(args.config_file)
-API_URL, API_KEY, course_id = get_API(config, args.instance, args.course_id, args.config_file)
+API_KEY = get_API(config, args.config_file)
 
-# set some variables needed later on
-full_page_url = '/'.join([API_URL, 'courses', course_id, 'pages', args.page_name])
+# split url into parts
+none, API_URL, course_id, page_name, none = re.split('(.*)/courses/(.*)/pages/(.*)', args.url)
 
 # Initialize a new Canvas object
 canvas = Canvas(API_URL, API_KEY)
@@ -66,9 +63,9 @@ with open(args.html_file, 'r') as html_file:
 
 # get the course page
 try:
-    page_to_update = course.get_page(args.page_name)
+    page_to_update = course.get_page(page_name)
 except:
-    sys.exit("Error: could not find page '%s' on Canvas for updating.\nFull url: %s" % (args.page_name, full_page_url))
+    sys.exit("Error: could not find page '%s' on Canvas for updating.\nFull url: %s" % (page_name, args.url))
 
 # test for whether the existing page is identical to the new html file
 if page_to_update.body.split("\n")[:-1] == html_content.split("\n")[:-1]:
@@ -80,9 +77,9 @@ api_call_result = page_to_update.edit(wiki_page = {"title":page_to_update.title,
 # testing whether the update has happened
 # in which case the first part of the api_call_result is the updated html
 if html_content in api_call_result.body:
-    print("Sucessfully updated page "+ full_page_url)
+    print("Sucessfully updated page "+ args.url)
 
 
 # title_for_page = 'Testing Canvas API'
 # canvas uses the page title in lower case with dashes for spaces as url for the page
-# url_for_page = 'testing-canvas-api' # title_for_page.lower().replace(' ','-')
+# page_name = 'testing-canvas-api' # title_for_page.lower().replace(' ','-')
