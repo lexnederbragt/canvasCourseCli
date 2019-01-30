@@ -20,6 +20,8 @@ Available:
     send_html -u URL -f HTML_FILE  Update the content of a page on Canvas.
     view_html -u URL               View the content of a page on Canvas.
 
+To get help on individual commands: canvastf <command> -h 
+
 ''')
 
         commands = {

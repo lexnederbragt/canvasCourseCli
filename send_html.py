@@ -5,9 +5,9 @@ from api import get_course, split_url
 def parse_args(args):
     # help text and argument parser
     # solution based on https://stackoverflow.com/a/24181138/462692
-    desc = '\n'.join(["To be added.",
-                     "Add note about default config file '~/.config/canvasapi.conf'.\n"
-                     "An optional argument -c/--config_file can be used with the path to the config file."
+    desc = '\n'.join(["Updates an existing page on canvas with the content of an html file.",
+                     "An optional argument -c/--config_file can be used with the path to the config file. "
+                     "Otherwise the default config file '~/.config/canvasapi.conf' will be used.\n"
                       ])
     parser = argparse.ArgumentParser(description=desc)
     required_named = parser.add_argument_group('required named arguments')

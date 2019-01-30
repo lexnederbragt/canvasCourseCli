@@ -31,13 +31,16 @@ def get_API(config_file_name, API_URL):
     return API_KEY
 
 def get_course(url, config_file):
+    """
+    Connects to canvas and retrieves the course.
+    """
     # split url into parts
     API_URL, course_id, page_name = split_url(url)
 
     # load configuration settings
     API_KEY = get_API(config_file, API_URL)
 
-    # Initialize a new Canvas object
+    # initialize a new Canvas object
     canvas = Canvas(API_URL, API_KEY)
 
     # get the course

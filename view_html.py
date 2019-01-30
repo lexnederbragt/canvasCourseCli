@@ -6,7 +6,10 @@ from api import get_course, split_url
 def parse_args(args):
     # help text and argument parser
     # solution based on https://stackoverflow.com/a/24181138/462692
-    desc = '\n'.join(["Command view_html not yet implemented."])
+    desc = '\n'.join(["Shows the html content of an existing page on canvas.",
+                     "An optional argument -c/--config_file can be used with the path to the config file. "
+                     "Otherwise the default config file '~/.config/canvasapi.conf' will be used.\n"
+                      ])
     parser = argparse.ArgumentParser(description=desc)
     required_named = parser.add_argument_group('required named arguments')
     required_named.add_argument("-u", "--url", help="The full url of the page for viewing", required = True)
