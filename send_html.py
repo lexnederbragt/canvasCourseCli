@@ -24,7 +24,7 @@ def get_API(config_file_name, API_URL):# canvas_instance, course_id, config_file
     return API_KEY
 
 
-def parse_args():
+def parse_args(args):
     # help text and argument parser
     # solution based on https://stackoverflow.com/a/24181138/462692
     desc = '\n'.join(["To be added.",
@@ -36,11 +36,11 @@ def parse_args():
     required_named.add_argument("-u", "--url", help="The full url of the page to be updated", required = True)
     required_named.add_argument("-f", "--html_file", help="The name of the html file that will be sent to Canvas", required = True)
     parser.add_argument("-cf", "--config_file", help="Path to config file", default = '~/.config/canvasapi.conf')
-    args = parser.parse_args()
+    args = parser.parse_args(args)
     return args
 
-def main():
-    args = parse_args()
+def main(args):
+    args = parse_args(args)
 
     # split url into parts
     none, API_URL, course_id, page_name, none = re.split('(.*)/courses/(.*)/pages/(.*)', args.url)
@@ -81,5 +81,5 @@ def main():
     else:
         print("Page", args.url, "appears to have been updated but new content is not identical to the html file provided...")
 
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    main(sys.argv[1:])
