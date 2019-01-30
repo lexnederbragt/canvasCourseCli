@@ -6,7 +6,8 @@ import sys
 import send_html
 import view_html
 
-
+# modelled after _ _ main _ _.py from
+# https://github.com/dib-lab/screed/tree/master/screed
 class AllCommands(object):
 
     def __init__(self):

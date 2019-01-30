@@ -1,28 +1,6 @@
-import os, sys
-import configparser
-from canvasapi import Canvas
-from canvasapi import page
+import sys
 import argparse
-import re
-
-def get_API(config_file_name, API_URL):# canvas_instance, course_id, config_file_name):
-    """
-    Parse config file
-    Extract correct API key
-    """
-
-    config = configparser.ConfigParser()
-    result = config.read_file(open(os.path.expanduser(config_file_name)))
-    if result == []:
-        sys.exit("Error: could not open config file or config file was empty or malformed: " + config_file)
-    # Canvas API key
-    try:
-        API_KEY = config[API_URL]['api_key']
-    except KeyError:
-        sys.exit("Error: could not find the entry for 'api-key' in the Canvas instance '%s' section of the config file '%s'." % (API_URL, config_file_name))
-
-    return API_KEY
-
+from api import get_course, split_url
 
 def parse_args(args):
     # help text and argument parser
@@ -42,20 +20,8 @@ def parse_args(args):
 def main(args):
     args = parse_args(args)
 
-    # split url into parts
-    none, API_URL, course_id, page_name, none = re.split('(.*)/courses/(.*)/pages/(.*)', args.url)
-
-    # load configuration settings
-    API_KEY = get_API(args.config_file, API_URL)
-
-    # Initialize a new Canvas object
-    canvas = Canvas(API_URL, API_KEY)
-
-    # get the course
-    try:
-        course = canvas.get_course(course_id)
-    except:
-        sys.exit("Could not connect to Canvas, check internet connection and/or API key in the config file %s" % args.config_file)
+    page_name = split_url(args.url)[2]
+    course =  get_course(args.url, args.config_file)
 
     # read new content
     with open(args.html_file, 'r') as html_file:
