@@ -33,19 +33,20 @@ def main(args):
     except:
         sys.exit("Error: could not find page '%s' on Canvas for updating.\nFull url: %s" % (page_name, args.url))
 
-    # test for whether the existing page is identical to the new html file
-    if page_to_update.body.split("\n")[:-1] == html_content.split("\n")[:-1]:
-        print("It seems the content of the html file '%s' is identical to the current page on canvas. The update may not result in any change." % args.html_file)
+    # Get current revision
+    old_rev = page_to_update.get_revisions()[0]
 
     # update the course page
     api_call_result = page_to_update.edit(wiki_page = {"title":page_to_update.title, "body":html_content})
 
     # testing whether the update has happened
-    # in which case the first part of the api_call_result is the updated html
-    if html_content in api_call_result.body:
-        print("Sucessfully updated page "+ args.url)
+    # in which case the revision has changed
+    new_rev = page_to_update.get_revisions()[0]
+    if str(new_rev) != str(old_rev):
+        print("Sucessfully updated page "+ args.url + " to revision '" + str(new_rev) + "'")
     else:
-        print("Page", args.url, "appears to have been updated but new content is not identical to the html file provided...")
+        print("The API call was succesful, but the page", args.url, "appears not to have recieved a new revision number.")
+        print("This could mean the current content is identical to the html file provided.")
 
 if __name__ == "__main__":
     main(sys.argv[1:])
