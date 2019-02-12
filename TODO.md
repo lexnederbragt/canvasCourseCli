@@ -7,3 +7,9 @@
 *
 `title_for_page = 'Testing Canvas API'``
 `page_name = 'testing-canvas-api' # title_for_page.lower().replace(' ','-')``
+
+Use this for creating a new folder (after testing it does not already exist)
+```
+if not folder_exists(new_folder_name):
+    course.create_folder(new_folder_name, parent_folder_path = '/')
+```
