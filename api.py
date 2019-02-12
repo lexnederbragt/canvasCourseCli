@@ -6,8 +6,12 @@ from canvasapi import page
 
 def split_url(url):
     """
-    Retrieve API url, course id and page name from full url:
-     <https://canvas.instance.com>/courses/<course_id>/pages/<page_name>
+    Retrieve API url, course id and page name from full URL:
+    Example URL:
+    https://canvas.instance.com/courses/course_id/pages/page_name
+    * API url: https://canvas.instance.com
+    * course ID: course_id
+    * page name: page_name
     """
     none, API_URL, course_id, page_name, none = re.split('(.*)/courses/(.*)/pages/(.*)', url)
     return API_URL, course_id, page_name
@@ -50,3 +54,21 @@ def get_course(url, config_file):
         sys.exit("Could not connect to Canvas, check internet connection and/or API key in the config file %s" % config_file)
 
     return course
+
+def folder_exists(course, folder_name):
+    """
+    Tests whether a folder exists for a course
+    The folder name is everything following the 'files/folder/' in the folder's URL:
+
+    'folder_name' in the case of this URL
+    https://canvas.instance.com/courses/course_id/files/folder/folder_name
+
+    OR
+
+    'folder1/folder2/folder_name' in the case of this URL
+    https://canvas.instance.com/courses/course_id/files/folder/folder1/folder2/folder_name
+    """
+    for folder in course.get_folders():
+        if folder.full_name == 'course files/' + folder_name:
+            return True
+    return False
