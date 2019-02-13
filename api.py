@@ -81,3 +81,11 @@ def folder_exists(course, folder_name):
         if folder.full_name == 'course files/' + folder_name:
             return True
     return False
+
+def find_folder(course, folder_name):
+    """
+    Uses folder name to find the corresponding folder
+    """
+    for folder in course.get_folders():
+        if folder.full_name == 'course files/' + folder_name:
+            return folder
