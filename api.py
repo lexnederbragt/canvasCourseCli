@@ -4,9 +4,9 @@ import re
 from canvasapi import Canvas
 from canvasapi import page
 
-def split_url(url):
+def split_page_url(url):
     """
-    Retrieve API url, course id and page name from full URL:
+    Retrieve API url, course id and page name from full URL
     Example URL:
     https://canvas.instance.com/courses/course_id/pages/page_name
     * API url: https://canvas.instance.com
@@ -15,6 +15,18 @@ def split_url(url):
     """
     none, API_URL, course_id, page_name, none = re.split('(.*)/courses/(.*)/pages/(.*)', url)
     return API_URL, course_id, page_name
+
+def split_folder_url(url):
+    """
+    Retrieve API url, course id and folder name from full URL
+    Example URL:
+    https://canvas.instance.com/courses/course_id/files/folder/folder_name
+    * API url: https://canvas.instance.com
+    * course ID: course_id
+    * folder name: folder_name
+    """
+    none, API_URL, course_id, folder_name, none = re.split('(.*)/courses/(.*)/files/folder/(.*)', url)
+    return API_URL, course_id, folder_name
 
 def get_API(config_file_name, API_URL):
     """
@@ -34,13 +46,10 @@ def get_API(config_file_name, API_URL):
 
     return API_KEY
 
-def get_course(url, config_file):
+def get_course(API_URL, course_id, config_file):
     """
     Connects to canvas and retrieves the course.
     """
-    # split url into parts
-    API_URL, course_id, page_name = split_url(url)
-
     # load configuration settings
     API_KEY = get_API(config_file, API_URL)
 

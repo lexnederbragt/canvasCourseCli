@@ -1,6 +1,6 @@
 import sys
 import argparse
-from api import get_course, split_url
+from api import get_course, split_page_url
 
 def parse_args(args):
     # help text and argument parser
@@ -20,8 +20,8 @@ def parse_args(args):
 def main(args):
     args = parse_args(args)
 
-    page_name = split_url(args.url)[2]
-    course =  get_course(args.url, args.config_file)
+    API_URL, course_id, page_name = split_page_url(args.url)
+    course =  get_course(API_URL, course_id, args.config_file)
 
     # read new content
     with open(args.html_file, 'r') as html_file:
@@ -45,7 +45,7 @@ def main(args):
     if str(new_rev) != str(old_rev):
         print("Sucessfully updated page "+ args.url + " to revision '" + str(new_rev) + "'")
     else:
-        print("The API call was succesful, but the page", args.url, "appears not to have recieved a new revision number.")
+        print("The API call was succesful, but the page %s appears not to have recieved a new revision number." % args.url)
         print("This could mean the current content is identical to the html file provided.")
 
 if __name__ == "__main__":
