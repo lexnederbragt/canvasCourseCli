@@ -1,5 +1,6 @@
 import sys
 import argparse
+import os.path
 from api import get_course, split_folder_url, find_folder
 
 def parse_args(args):
@@ -20,18 +21,28 @@ def parse_args(args):
 def main(args):
     args = parse_args(args)
 
+    # check whether file to upload actually exists
+    if not os.path.isfile(args.file_to_send):
+        sys.exit("Error: could not find file '%s'" % args.file_to_send)
+
     # split url into parts
     API_URL, course_id, folder_name = split_folder_url(args.url)
     course =  get_course(API_URL, course_id, args.config_file)
 
+    # find the folder
     folder = find_folder(course, folder_name)
     if not folder:
         sys.exit("Could not find folder '%s'. Full url: %s" %(folder_name, args.url))
 
-    folder.upload(args.file_to_send)
-
-
-
+    # do the upload and capture the return
+    result = folder.upload(args.file_to_send)
+    # first key is True when successful
+    if result[0]:
+        print("Succesfully uploaded file '%s' to folder '%s'.\nFull url: %s" \
+        % (args.file_to_send, folder_name, args.url + '/' + args.file_to_send))
+    else:
+        sys.exit("Could not upload file '%s' to folder '%s'.\nFull url: %s" \
+        % (args.file_to_send, folder_name, args.url + '/' + args.file_to_send))
 
 if __name__ == "__main__":
     main(sys.argv[1:])
