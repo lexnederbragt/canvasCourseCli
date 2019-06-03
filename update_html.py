@@ -12,7 +12,7 @@ def parse_args(args):
     parser = argparse.ArgumentParser(description=desc)
     required_named = parser.add_argument_group('required named arguments')
     required_named.add_argument("-u", "--url", help="The full url of the page to be updated", required = True)
-    required_named.add_argument("-f", "--html_file", help="The name of the html file that will be sent to Canvas", required = True)
+    required_named.add_argument("-f", "--html_file", help="The path to the html file that will be sent to Canvas", required = True)
     parser.add_argument("-cf", "--config_file", help="Path to config file", default = '~/.config/canvasapi.conf')
     args = parser.parse_args(args)
     return args
