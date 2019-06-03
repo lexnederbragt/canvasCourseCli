@@ -1,4 +1,4 @@
-canvastf
+cvupdate
 --------
 
 Python tools for adding, retrieving and updating content on a Canvas instance. Work in progress.
@@ -19,4 +19,4 @@ api_key = YOURKEY2
 ```
 
 ## The name
-`canvastf` stands for "Canvas To From".
+`cvupdate` stands for "canvas update".
