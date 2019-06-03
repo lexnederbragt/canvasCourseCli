@@ -15,7 +15,7 @@ class AllCommands(object):
     def __init__(self):
         parser = argparse.ArgumentParser(
             description="",
-            usage='''cvupdate <command> [<args>]
+            usage='''cvupdate.py <command> [<args>]
 
 Available:
 
