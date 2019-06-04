@@ -3,8 +3,8 @@
 import argparse
 import sys
 
-import update_html
-import view_html
+import update_page
+import view_page
 import create_folder
 import add_file
 
@@ -19,8 +19,8 @@ class AllCommands(object):
 
 Available:
 
-    update_html   -u URL -f HTML_FILE      Update the content of a page on Canvas.
-    view_html     -u URL                   View the content of a page on Canvas.
+    update_page   -u URL -f HTML_FILE      Update the content of a page on Canvas.
+    view_page     -u URL                   View the content of a page on Canvas.
     create_folder -u URL                   Create a new folder on Canvas.
     add_file      -u URL -f FILE_TO_SEND   Add a file to a folder on Canvas.
 
@@ -29,8 +29,8 @@ To get help on individual commands: cvupdate <command> -h
 ''')
 
         commands = {
-            'update_html': update_html.main,
-            'view_html': view_html.main,
+            'update_page': update_page.main,
+            'view_page': view_page.main,
             'create_folder': create_folder.main,
             'add_file': add_file.main,
         }

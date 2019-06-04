@@ -25,8 +25,8 @@ usage: cvupdate.py <command> [<args>]
 
 Available:
 
-    update_html   -u URL -f HTML_FILE      Update the content of a page on Canvas.
-    view_html     -u URL                   View the content of a page on Canvas.
+    update_page   -u URL -f HTML_FILE      Update the content of a page on Canvas.
+    view_page     -u URL                   View the content of a page on Canvas.
     create_folder -u URL                   Create a new folder on Canvas.
     add_file      -u URL -f FILE_TO_SEND   Add a file to a folder on Canvas.
 
@@ -36,12 +36,12 @@ Available:
 To view the content of a page on canvas (in html format):
 
 ```
-cvupdate.py view_html -u https://instance.instructure.com/courses/9999/pages/name-of-page
+cvupdate.py view_page -u https://instance.instructure.com/courses/9999/pages/name-of-page
 ```
 
 To replace the content of an existing page with content of a file (in html format):
 ```
-cvupdate.py update_html -u https://instance.instructure.com/courses/9999/pages/name-of-page -f file.html
+cvupdate.py update_page -u https://instance.instructure.com/courses/9999/pages/name-of-page -f file.html
 ```
 
 To create a new folder:
