@@ -43,7 +43,7 @@ def main(args):
     # in which case the revision has changed
     new_rev = page_to_update.get_revisions()[0]
     if str(new_rev) != str(old_rev):
-        print("Sucessfully updated page "+ args.url + " to revision '" + str(new_rev) + "'")
+        print("Successfully updated page "+ args.url + " to revision '" + str(new_rev) + "'")
     else:
         print("The API call was succesful, but the page %s appears not to have recieved a new revision number." % args.url)
         print("This could mean the current content is identical to the html file provided.")
