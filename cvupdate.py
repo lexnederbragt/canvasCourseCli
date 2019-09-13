@@ -7,6 +7,7 @@ import update_page
 import view_page
 import create_folder
 import add_file
+import add_to_module
 
 # modelled after _ _ main _ _.py from
 # https://github.com/dib-lab/screed/tree/master/screed
@@ -23,6 +24,7 @@ Available:
     view_page     -u URL                   View the content of a page on Canvas.
     create_folder -u URL                   Create a new folder on Canvas.
     add_file      -u URL -f FILE_TO_SEND   Add a file to a folder on Canvas.
+    add_to_module -u URL -m MODULE_NAME    Add a page on Canvas to a module.
 
 To get help on individual commands: cvupdate <command> -h
 
@@ -33,6 +35,7 @@ To get help on individual commands: cvupdate <command> -h
             'view_page': view_page.main,
             'create_folder': create_folder.main,
             'add_file': add_file.main,
+            'add_to_module': add_to_module.main
         }
 
         parser.add_argument('command')

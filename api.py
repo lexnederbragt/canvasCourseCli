@@ -89,3 +89,11 @@ def find_folder(course, folder_name):
     for folder in course.get_folders():
         if folder.full_name == 'course files/' + folder_name:
             return folder
+
+def find_module(course, module_name):
+    """
+    Uses module name to find the corresponding module
+    """
+    for module in course.get_modules():
+        if module.name == module_name:
+            return module
