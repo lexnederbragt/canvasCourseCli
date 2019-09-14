@@ -31,10 +31,12 @@ usage: cvupdate.py <command> [<args>]
 
 Available:
 
-    update_page   -u URL -f HTML_FILE      Update the content of a page on Canvas.
-    view_page     -u URL                   View the content of a page on Canvas.
-    create_folder -u URL                   Create a new folder on Canvas.
-    add_file      -u URL -f FILE_TO_SEND   Add a file to a folder on Canvas.
+    add_page      -u URL -t TITLE -f HTML_FILE  Update the content of a page on Canvas.
+    update_page   -u URL -f HTML_FILE           Update the content of a page on Canvas.
+    view_page     -u URL                        View the content of a page on Canvas.
+    create_folder -u URL                        Create a new folder on Canvas.
+    add_file      -u URL -f FILE_TO_SEND        Add a file to a folder on Canvas.
+    add_to_module -u URL -m MODULE_NAME         Add a page on Canvas to a module.
 
 ```
 
@@ -42,9 +44,9 @@ Available:
 To add a new page to canvas (based on a file in html format):
 
 ```
-cvupdate.py add_page -u https://instance.instructure.com/courses/9999 -t 'My new page'
+cvupdate.py add_page -u https://instance.instructure.com/courses/9999 -t 'My new page' -f file.html
 ```
-NOTE the url of the new page becomes https://instance.instructure.com/courses/9999/pages/my-new-page
+NOTE the url of the new page becomes `https://instance.instructure.com/courses/9999/pages/my-new-page`
 
 To view the content of a page on canvas (in html format):
 
