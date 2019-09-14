@@ -1,6 +1,6 @@
 import sys
 import argparse
-from api import get_course, split_folder_url, folder_exists
+from api import get_course, split_url, folder_exists
 
 def parse_args(args):
     # help text and argument parser
@@ -19,8 +19,8 @@ def parse_args(args):
 def main(args):
     args = parse_args(args)
 
-    # split url into parts
-    API_URL, course_id, new_folder_name = split_folder_url(args.url)
+    # extract course information from url and get course
+    API_URL, course_id, new_folder_name = split_url(args.url, expected = 'folder')
     course =  get_course(API_URL, course_id, args.config_file)
 
     if not folder_exists(course, new_folder_name):

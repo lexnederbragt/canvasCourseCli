@@ -1,7 +1,7 @@
 import sys
 import argparse
 import os.path
-from api import get_course, split_folder_url, find_folder
+from api import get_course, split_url, find_folder
 
 def parse_args(args):
     # help text and argument parser
@@ -25,8 +25,8 @@ def main(args):
     if not os.path.isfile(args.file_to_send):
         sys.exit("Error: could not find file '%s'" % args.file_to_send)
 
-    # split url into parts
-    API_URL, course_id, folder_name = split_folder_url(args.url)
+    # extract course information from url and get course
+    API_URL, course_id, folder_name = split_url(args.url, expected = 'folder')
     course =  get_course(API_URL, course_id, args.config_file)
 
     # find the folder

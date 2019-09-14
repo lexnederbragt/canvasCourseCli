@@ -37,31 +37,7 @@ def split_url(url, expected):
         sys.exit("Unexpected type url: expected url of type '%s', got type '%s': " \
         %(expected, url_type) + url)
 
-    return API_URL, course_id, url_type, item_name
-
-def split_page_url(url):
-    """
-    Retrieve API url, course id and page name from full URL
-    Example URL:
-    https://canvas.instance.com/courses/course_id/pages/page_name
-    * API url: https://canvas.instance.com
-    * course ID: course_id
-    * page name: page_name
-    """
-    none, API_URL, course_id, page_name, none = re.split('(.*)/courses/(.*)/pages/(.*)', url)
-    return API_URL, course_id, page_name
-
-def split_folder_url(url):
-    """
-    Retrieve API url, course id and folder name from full URL
-    Example URL:
-    https://canvas.instance.com/courses/course_id/files/folder/folder_name
-    * API url: https://canvas.instance.com
-    * course ID: course_id
-    * folder name: folder_name
-    """
-    none, API_URL, course_id, folder_name, none = re.split('(.*)/courses/(.*)/files/folder/(.*)', url)
-    return API_URL, course_id, folder_name
+    return API_URL, course_id, item_name
 
 def get_API(config_file_name, API_URL):
     """

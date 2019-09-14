@@ -1,7 +1,7 @@
 import sys
 import argparse
 import os.path
-from api import get_course, split_page_url, find_module
+from api import get_course, split_url, find_module
 
 def parse_args(args):
     # help text and argument parser
@@ -25,9 +25,8 @@ def parse_args(args):
 def main(args):
     args = parse_args(args)
 
-    API_URL, course_id, page_name = split_page_url(args.url)
-
-    # get the course
+    # extract course information from url and get course
+    API_URL, course_id, page_name = split_url(args.url, expected = 'page')
     course =  get_course(API_URL, course_id, args.config_file)
 
     # check whether page to add actually exists
@@ -43,7 +42,7 @@ def main(args):
 
     # update the module
     try:
-        api_call_result = module.create_module_item(module_item = {
+        new_module_item = module.create_module_item(module_item = {
             "type":"Page",
             "content_id":"",
             "page_url": page_to_add.url

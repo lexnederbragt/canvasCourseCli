@@ -1,6 +1,6 @@
 import sys
 import argparse
-from api import get_course, split_page_url
+from api import get_course, split_url
 
 
 def parse_args(args):
@@ -19,7 +19,9 @@ def parse_args(args):
 
 def main(args):
     args = parse_args(args)
-    API_URL, course_id, page_name = split_page_url(args.url)
+
+    # extract course information from url and get course
+    API_URL, course_id, page_name = split_url(args.url, expected = 'page')
     course =  get_course(API_URL, course_id, args.config_file)
 
     # get the course page
