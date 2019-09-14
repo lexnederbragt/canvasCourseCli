@@ -20,7 +20,13 @@ def split_url(url, expected):
     """
 
     # split the url
-    none, API_URL, course_id, rest, none = re.split(r'(.*)/courses/(\d*)/(.*)', url)
+    if expected in ['page', 'folder']:
+        none, API_URL, course_id, rest, none = re.split(r'(.*)/courses/(\d*)/(.*)', url)
+    elif expected in ['new page']:
+        none, API_URL, course_id, none = re.split(r'(.*)/courses/(\d*)', url)
+        rest = 'course url'
+    else:
+        sys.exit("Expected url type not implemented yet: " + expected)
 
     # determine type
     if rest.startswith('pages/'):
@@ -29,6 +35,9 @@ def split_url(url, expected):
     elif rest.startswith('files/folder/'):
         url_type = 'folder'
         item_name = re.sub(r'^files/folder/', '', rest)
+    elif rest == 'course url' and expected == 'new page':
+        url_type = 'new page'
+        item_name = ''
     else:
         sys.exit("Unexpected url: not of type 'folder' or 'page' " + url)
 
