@@ -34,7 +34,7 @@ def main(args):
     try:
         page_to_add = course.get_page(page_name)
     except:
-        sys.exit("Error: could not find page '%s' on Canvas.\nFull url: %s" \% (page_name, args.url))
+        sys.exit("Error: could not find page '%s' on Canvas.\nFull url: %s" % (page_name, args.url))
 
     # find the module
     module = find_module(course, args.module_name)
