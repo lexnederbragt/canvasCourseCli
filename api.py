@@ -4,6 +4,32 @@ import re
 from canvasapi import Canvas
 from canvasapi import page
 
+def split_url(url):
+    """
+    Retrieve API url, course id from full URL
+    Determine url type: folder name, page name
+    Example URL:
+    https://canvas.instance.com/courses/course_id/pages/page_name
+    https://canvas.instance.com/courses/course_id/files/folder/folder_name
+    * API url: https://canvas.instance.com
+    * course ID: course_id
+    * page name: page_name
+    * folder name: folder_name
+    """
+
+    # split the url
+    none, API_URL, course_id, rest, none = re.split(r'(.*)/courses/(\d*)/(.*)', url)
+
+    if rest.startswith('pages'):
+        url_type = 'page'
+        item_name = re.sub(r'^pages/', '', rest)
+    elif rest.startswith('files/folder'):
+        url_type = 'folder'
+        item_name = re.sub(r'^files/folder/', '', rest)
+    else:
+        sys.exit("Unexpected url: not of type 'folder' or 'page' " + url)
+    return API_URL, course_id, url_type, item_name
+
 def split_page_url(url):
     """
     Retrieve API url, course id and page name from full URL
