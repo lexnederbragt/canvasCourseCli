@@ -39,6 +39,13 @@ Available:
 ```
 
 ### Examples
+To add a new page to canvas (based on a file in html format):
+
+```
+cvupdate.py add_page -u https://instance.instructure.com/courses/9999 -t 'My new page'
+```
+NOTE the url of the new page becomes https://instance.instructure.com/courses/9999/pages/my-new-page
+
 To view the content of a page on canvas (in html format):
 
 ```
@@ -54,13 +61,22 @@ To create a new folder:
 ```
 cvupdate.py create_folder -u https://instance.instructure.com/courses/9999/files/folder/name-of-folder
 ```
+
 To add a new file, or overwite an existing one with the same name:
 ```
 cvupdate.py add_file -u https://instance.instructure.com/courses/9999/files/folder/name-of-folder/name-of-file -f name-of-file.pdf
+```
+
+To add an existing page to an existing module:
+```
+cvupdate.py add_to_module -u https://instance.instructure.com/courses/9999/pages/name-of-page -n 'Name of module'
 ```
 
 ## The name
 `cvupdate` stands for "canvas update".
 
 ## Why I developed this
-I wanted to be able to write pages for Canvas in Markdown, put these under version control, and use a Makefile to convert them to html (using pandoc) and update them on the course's Canvas instance, as well as send files to Canvas from the command line.
+I wanted to be able to use the command line to view, add and update content on Canvas. For example:
+* write pages for Canvas in Markdown, put these under version control, and use a Makefile to automatically convert them to html (using pandoc) and add or update them on the course's Canvas instance
+* send files to Canvas from the command line
+* add pages to modules
