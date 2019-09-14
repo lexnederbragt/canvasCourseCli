@@ -4,10 +4,12 @@ import re
 from canvasapi import Canvas
 from canvasapi import page
 
-def split_url(url):
+def split_url(url, expected):
     """
     Retrieve API url, course id from full URL
-    Determine url type: folder name, page name
+    Determine url type and compare to expected
+    Current url types: folder name, page name
+
     Example URL:
     https://canvas.instance.com/courses/course_id/pages/page_name
     https://canvas.instance.com/courses/course_id/files/folder/folder_name
@@ -20,14 +22,21 @@ def split_url(url):
     # split the url
     none, API_URL, course_id, rest, none = re.split(r'(.*)/courses/(\d*)/(.*)', url)
 
-    if rest.startswith('pages'):
+    # determine type
+    if rest.startswith('pages/'):
         url_type = 'page'
         item_name = re.sub(r'^pages/', '', rest)
-    elif rest.startswith('files/folder'):
+    elif rest.startswith('files/folder/'):
         url_type = 'folder'
         item_name = re.sub(r'^files/folder/', '', rest)
     else:
         sys.exit("Unexpected url: not of type 'folder' or 'page' " + url)
+
+    # compare to expected
+    if url_type != expected:
+        sys.exit("Unexpected type url: expected url of type '%s', got type '%s': " \
+        %(expected, url_type) + url)
+
     return API_URL, course_id, url_type, item_name
 
 def split_page_url(url):
