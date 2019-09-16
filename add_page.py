@@ -31,14 +31,13 @@ def main(args):
         html_content = html_file.read()#.replace('\n', '')
 
     # update the course page
-    published = 'true'
     new_page = course.create_page(wiki_page = {
         "title":args.title,
         "body":html_content,
         "published":published
         })
     print("Sucessfully added page '%s'. Full url: '%s'." \
-        %(new_page.title, API_URL + '/' + course_id + '/pages/' + new_page.url))
+        %(new_page.title, API_URL + '/courses/' + course_id + '/pages/' + new_page.url))
 
 if __name__ == "__main__":
     main(sys.argv[1:])
