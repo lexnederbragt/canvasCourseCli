@@ -1,9 +1,16 @@
-# steps before testing:
-# remove page(s) https://uio.instructure.com/courses/4258/pages/adding-a-page
-# change api_test.html (optional)
-# delete folder https://uio.instructure.com/courses/4258/test
-
+# change URL to the relevant course
 URL=https://uio.instructure.com/courses/4258
+
+# steps before testing:
+# have a page called ${URL}/pages/testing-canvas-api
+# remove page(s) ${URL}/pages/adding-a-page
+# change api_test.html (optional)
+# delete folder ${URL}/test
+
+# this script
+# *
+# * adds a page: ${URL}/pages/adding-a-page
+
 # testing script on UiO canvas instance
 echo Updating ${URL}/pages/testing-canvas-api
 cvupdate.py update_page -u ${URL}/pages/testing-canvas-api -f api_test.html

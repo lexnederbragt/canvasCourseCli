@@ -1,13 +1,16 @@
 cvupdate
 --------
 
+A Python-based command-line tool for adding, retrieving and updating content on a Canvas instance.
+
+ * [Dependencies](#Dependencies)
  * [Configuration file](#configuration-file)
  * [Basic usage](#basic-usage)
     * [Examples](#examples)
  * [The name](#the-name)
  * [Why I developed this](#why-i-developed-this)
 
- A python-based command-line tool for adding, retrieving and updating content on a Canvas instance. Work in progress.
+## Dependencies
 
 Depends on [canvasAPI](https://canvasapi.readthedocs.io/en/latest/).
 
