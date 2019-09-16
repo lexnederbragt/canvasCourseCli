@@ -4,7 +4,6 @@
 * instead of using the full base url, use the part following `http{s}://`
 * capture urls with double forward slashes `//`
 * implement creating a new folder in a new folder in one operation
-* when creating a new page, leave unpublished, optionally publish at the same time
 * when creating a new page, enable option to add to an existing module in the same operation
 * when creating a new page, check whether page already exists
 * when updating a page, check whether page already exists and if not, enable in the same operation
