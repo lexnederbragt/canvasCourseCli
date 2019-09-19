@@ -21,7 +21,7 @@ class AllCommands(object):
 
 Available:
 
-    add_page      -u URL -t TITLE -f HTML_FILE  Update the content of a page on Canvas.
+    add_page      -u URL -t TITLE -f HTML_FILE  Add a new page to Canvas.
     update_page   -u URL -f HTML_FILE           Update the content of a page on Canvas.
     view_page     -u URL                        View the content of a page on Canvas.
     create_folder -u URL                        Create a new folder on Canvas.
