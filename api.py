@@ -8,7 +8,7 @@ def split_url(url, expected):
     """
     Retrieve API url, course id from full URL
     Determine url type and compare to expected
-    Current url types: folder name, page name
+    Current url types: folder name, page name, url only
 
     Example URL:
     https://canvas.instance.com/courses/course_id/pages/page_name
@@ -22,7 +22,7 @@ def split_url(url, expected):
     # split the url
     if expected in ['page', 'folder']:
         none, API_URL, course_id, rest, none = re.split(r'(.*)/courses/(\d*)/(.*)', url)
-    elif expected in ['new page']:
+    elif expected in ['new page', 'url only']:
         none, API_URL, course_id, none = re.split(r'(.*)/courses/(\d*)', url)
         rest = 'course url'
     else:
@@ -37,6 +37,9 @@ def split_url(url, expected):
         item_name = re.sub(r'^files/folder/', '', rest)
     elif rest == 'course url' and expected == 'new page':
         url_type = 'new page'
+        item_name = ''
+    elif rest == 'course url' and expected == 'url only':
+        url_type = 'url only'
         item_name = ''
     else:
         sys.exit("Unexpected url: not of type 'folder' or 'page' " + url)

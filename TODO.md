@@ -8,6 +8,7 @@
 * when creating a new page, check whether page already exists
 * when updating a page, check whether page already exists and if not, enable in the same operation
 * enable adding any item using add_to_module (add_to_module can figure out file versus folder and adjust accordingly)
+* `tree.py`: add files (optional), full url (optional)
 * improve handling of exceptions (the current `try - except` solution is probably not good practice)
 * add more tests
 * turn into a Python package

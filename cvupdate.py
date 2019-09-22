@@ -6,6 +6,7 @@ import sys
 import add_page
 import update_page
 import view_page
+import tree
 import create_folder
 import add_file
 import add_to_module
@@ -24,6 +25,7 @@ Available:
     add_page      -u URL -t TITLE -f HTML_FILE  Add a new page to Canvas.
     update_page   -u URL -f HTML_FILE           Update the content of a page on Canvas.
     view_page     -u URL                        View the content of a page on Canvas.
+    tree          -u URL                        List all folders for a course on Canvas.
     create_folder -u URL                        Create a new folder on Canvas.
     add_file      -u URL -f FILE_TO_SEND        Add a file to a folder on Canvas.
     add_to_module -u URL -m MODULE_NAME         Add a page on Canvas to a module.
@@ -36,6 +38,7 @@ To get help on individual commands: cvupdate <command> -h
             'add_page': add_page.main,
             'update_page': update_page.main,
             'view_page': view_page.main,
+            'tree': tree.main,
             'create_folder': create_folder.main,
             'add_file': add_file.main,
             'add_to_module': add_to_module.main
