@@ -38,8 +38,12 @@ def main(args):
     result = folder.upload(args.file_to_send)
     # first key is True when successful
     if result[0]:
+        # extract file id from API call results
+        file_id = result[1]['id']
         print("Succesfully uploaded file '%s' to folder '%s'.\nFull url: %s" \
-        % (args.file_to_send, folder_name, args.url + '/' + args.file_to_send))
+        % (args.file_to_send, folder_name, args.url + '/?preview=' + str(file_id)))
+
+
     else:
         sys.exit("Could not upload file '%s' to folder '%s'.\nFull url: %s" \
         % (args.file_to_send, folder_name, args.url + '/' + args.file_to_send))
