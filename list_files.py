@@ -24,7 +24,6 @@ def main(args):
     API_URL, course_id, new_folder_name = split_url(args.url, expected = 'url only')
     course =  get_course(API_URL, course_id, args.config_file)
 
-    files = []
     for folder in course.get_folders():
         # remove leading '"course files/' from path
         folder_name = strip_folder_name(folder.full_name)
@@ -33,8 +32,7 @@ def main(args):
             folder_name += "/"
         for file in folder.get_files():
             preview_url = args.url + "/files/?preview=" + str(file.id)
-            files.append(folder_name + file.display_name +  "\t" + preview_url)
-            print(files[-1])
+            print(folder_name + file.display_name +  "\t" + preview_url)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
