@@ -5,7 +5,7 @@ from api import get_course, split_url, strip_folder_name
 def parse_args(args):
     # help text and argument parser
     # solution based on https://stackoverflow.com/a/24181138/462692
-    desc = '\n'.join(["Lists the files for a course on Canvas in aplphabetical order,",
+    desc = '\n'.join(["Lists the files for a course on Canvas in alphabetical order,",
                       "and a url to their preview on Canvas."
                      "An optional argument -c/--config_file can be used with the path to the config file. "
                      "Otherwise the default config file '~/.config/canvasapi.conf' will be used.\n"
