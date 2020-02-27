@@ -1,6 +1,6 @@
 import sys
 import argparse
-from api import get_course, split_url
+from api import get_course, split_url, strip_folder_name
 
 def parse_args(args):
     # help text and argument parser
@@ -26,7 +26,7 @@ def main(args):
     folders = []
     for folder in course.get_folders():
         # remove leading '"course files/' from path
-        folder_name = folder.full_name[13:]
+        folder_name = strip_folder_name(folder.full_name)
         folders.append(folder_name)
     print('\n'.join(sorted(folders, key=lambda s: s.lower())))
 

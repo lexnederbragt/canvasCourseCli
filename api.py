@@ -120,3 +120,9 @@ def find_module(course, module_name):
     for module in course.get_modules():
         if module.name == module_name:
             return module
+
+def strip_folder_name(long_folder_name):
+    """
+    Removes leading '"course files/' from folder 'path'
+    """
+    return long_folder_name[13:]
