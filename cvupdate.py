@@ -9,6 +9,7 @@ import view_page
 import tree
 import list_pages
 import list_files
+import dump
 import create_folder
 import add_file
 import add_to_module
@@ -30,6 +31,7 @@ Available:
     tree          -u URL                        List all folders for a course on Canvas.
     list_files    -u URL                        List all files for a course on Canvas.
     list_pages    -u URL                        List all pages for a course on Canvas.
+    dump          -u URL                        Download all files and pages for a course on Canvas.
     create_folder -u URL                        Create a new folder on Canvas.
     add_file      -u URL -f FILE_TO_SEND        Add a file to a folder on Canvas.
     add_to_module -u URL -m MODULE_NAME         Add a page on Canvas to a module.
@@ -45,6 +47,7 @@ To get help on individual commands: cvupdate <command> -h
             'tree': tree.main,
             'list_pages': list_pages.main,
             'list_files': list_files.main,
+            'dump': dump.main,
             'create_folder': create_folder.main,
             'add_file': add_file.main,
             'add_to_module': add_to_module.main
