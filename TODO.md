@@ -1,4 +1,5 @@
 # TO DO
+* add_page -p option should be a flag, not an argument requiring a value (workaround: use any value)
 * enable sending a file to the root folder
 * enable modifying the course homepage
 * instead of using the full base url, use the part following `http{s}://`
