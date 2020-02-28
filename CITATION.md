@@ -1,3 +1,5 @@
 # How to cite this software
 
-For now, refer to the GitHub repo. DOI forthcoming.
+https://github.com/lexnederbragt/canvasCourseCli
+
+ GitHub repo. DOI forthcoming.
