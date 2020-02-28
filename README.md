@@ -12,7 +12,8 @@ A Python-based command-line tool for adding, retrieving and updating content on 
 
 ## Dependencies
 
-Depends on [canvasAPI](https://canvasapi.readthedocs.io/en/latest/).
+Depends on [canvasAPI](https://canvasapi.readthedocs.io/en/latest/)
+(and thus uses Python 2), and [pathlib](https://pypi.org/project/pathlib/).
 
 ## Configuration file
 Requires a configuration file with a [Canvas API key](https://community.canvaslms.com/docs/DOC-14409-4214861717). Default config file is `~/.config/canvasapi.conf`, but this can be changed when calling the tool.
@@ -34,32 +35,32 @@ usage: cvupdate.py <command> [<args>]
 
 Available:
 
-add_page      -u URL -t TITLE -f HTML_FILE  Add a new page to Canvas.
-update_page   -u URL -f HTML_FILE           Update the content of a page on Canvas.
-view_page     -u URL                        View the content of a page on Canvas.
-tree          -u URL                        List all folders for a course on Canvas.
 list_files    -u URL                        List all files for a course on Canvas.
 list_pages    -u URL                        List all pages for a course on Canvas.
+tree          -u URL                        List all folders for a course on Canvas.
 dump          -u URL                        Download all files and pages for a course on Canvas.
+view_page     -u URL                        View the content of a page on Canvas.
+add_page      -u URL -t TITLE -f HTML_FILE  Add a new page to Canvas.
 create_folder -u URL                        Create a new folder on Canvas.
 add_file      -u URL -f FILE_TO_SEND        Add a file to a folder on Canvas.
+update_page   -u URL -f HTML_FILE           Update the content of a page on Canvas.
 add_to_module -u URL -m MODULE_NAME         Add a page on Canvas to a module.
-
 ```
 
 ### Examples
-To add a new page to canvas (based on a file in html format):
-
-```
-cvupdate.py add_page -u https://instance.instructure.com/courses/9999 -t 'My new page' -f file.html
-```
-NOTE the url of the new page becomes `https://instance.instructure.com/courses/9999/pages/my-new-page`
 
 To view the content of a page on canvas (in html format):
 
 ```
 cvupdate.py view_page -u https://instance.instructure.com/courses/9999/pages/name-of-page
 ```
+
+To add a new page to canvas (based on a file in html format):
+
+```
+cvupdate.py add_page -u https://instance.instructure.com/courses/9999 -t 'My new page' -f file.html
+```
+NOTE the url of the new page becomes `https://instance.instructure.com/courses/9999/pages/my-new-page`
 
 To replace the content of an existing page with content of a file (in html format):
 ```
