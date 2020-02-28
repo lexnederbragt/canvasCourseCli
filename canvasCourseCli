@@ -21,7 +21,7 @@ class AllCommands(object):
     def __init__(self):
         parser = argparse.ArgumentParser(
             description="",
-            usage='''canvasCourseCli.py <command> [<args>]
+            usage='''canvasCourseCli <command> [<args>]
 
 Available:
 
