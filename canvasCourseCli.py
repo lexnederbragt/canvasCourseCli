@@ -21,7 +21,7 @@ class AllCommands(object):
     def __init__(self):
         parser = argparse.ArgumentParser(
             description="",
-            usage='''cvupdate.py <command> [<args>]
+            usage='''canvasCourseCli.py <command> [<args>]
 
 Available:
 
@@ -36,7 +36,7 @@ Available:
     update_page   -u URL -f HTML_FILE           Update the content of a page on Canvas.
     add_to_module -u URL -m MODULE_NAME         Add a page on Canvas to a module.
 
-To get help on individual commands: cvupdate <command> -h
+To get help on individual commands: canvasCourseCli <command> -h
 
 ''')
 

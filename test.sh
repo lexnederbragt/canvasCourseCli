@@ -17,26 +17,26 @@ then
 else
 
     echo Updating ${URL}/pages/testing-canvas-api
-    cvupdate.py update_page -u ${URL}/pages/testing-canvas-api -f api_test.html
+    canvasCourseCli.py update_page -u ${URL}/pages/testing-canvas-api -f api_test.html
     echo
     echo Viewing ${URL}/pages/testing-canvas-api
-    cvupdate.py view_page -u ${URL}/pages/testing-canvas-api
+    canvasCourseCli.py view_page -u ${URL}/pages/testing-canvas-api
     echo
     echo Creating ${URL}/files/folder/test
-    cvupdate.py create_folder -u ${URL}/files/folder/test
+    canvasCourseCli.py create_folder -u ${URL}/files/folder/test
     echo
     echo Adding file api_test.txt to ${URL}/files/folder/test
-    cvupdate.py add_file -u ${URL}/files/folder/test -f api_test.txt
+    canvasCourseCli.py add_file -u ${URL}/files/folder/test -f api_test.txt
     echo
     echo Adding and publishing page "Adding a page" from file api_test2.html
-    cvupdate.py add_page -u ${URL} -t "Adding a page" -f api_test2.html -p
+    canvasCourseCli.py add_page -u ${URL} -t "Adding a page" -f api_test2.html -p
     echo
     echo Adding ${URL}/pages/adding-a-page to module 'API test module'
-    cvupdate.py add_to_module -u ${URL}/pages/adding-a-page -m 'API test module'
+    canvasCourseCli.py add_to_module -u ${URL}/pages/adding-a-page -m 'API test module'
     echo
     echo Listing all pages
-    cvupdate.py list_pages -u ${URL}
+    canvasCourseCli.py list_pages -u ${URL}
     echo
     echo Listing all files
-    cvupdate.py list_files -u ${URL}
+    canvasCourseCli.py list_files -u ${URL}
 fi
