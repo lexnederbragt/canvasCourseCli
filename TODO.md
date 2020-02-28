@@ -10,7 +10,8 @@
 * when updating a page, check whether page already exists and if not, enable in the same operation
 * enable adding any item using add_to_module (add_to_module can figure out file versus folder and adjust accordingly)
 * improve handling of exceptions (the current `try - except` solution is probably not good practice)
+* add flags for `dump.py` to only download pages or only files, and do a dry run.
+* consider adding commands to delete pages, files and folders, and remove items from modules
 * add more tests
 * turn into a Python package
 * get a doi
-* find a better name?
