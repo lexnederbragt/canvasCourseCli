@@ -95,7 +95,7 @@ canvasCourseCli add_to_module -u https://instance.instructure.com/courses/9999/p
 
 ## Testing the tool
 
-If you have a Canvas course instance you don't mind using, the shell script `test.sh` runs a few commands to test
+If you have a Canvas course instance you don't mind using, executing the shell script `test.sh` runs a few commands to test
 - viewing, updating, and adding a page
 - create a folder and add a file to it
 - list all pages and files
@@ -103,7 +103,7 @@ If you have a Canvas course instance you don't mind using, the shell script `tes
 
 ## The name
 
-`canvasCourseCli` is inspired by `canvasDataCli`, the command name of the [Canvas Data CLI Tool)(https://community.canvaslms.com/docs/DOC-6600-how-to-use-the-canvas-data-cli-tool#jive_content_id_Overview).
+`canvasCourseCli` is inspired by `canvasDataCli`, the command name of the [Canvas Data CLI Tool](https://community.canvaslms.com/docs/DOC-6600-how-to-use-the-canvas-data-cli-tool#jive_content_id_Overview).
 
 ## Why I developed this
 
