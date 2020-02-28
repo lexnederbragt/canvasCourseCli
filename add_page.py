@@ -15,7 +15,7 @@ def parse_args(args):
     required_named.add_argument("-t", "--title", help="The title the page to be added, enclosed in quotation marks if it \
     contains one or more spaces. Note that the url of the page will be the title in lower case, with each space replaced by a dash", required = True)
     required_named.add_argument("-f", "--html_file", help="The path to the html file that contains the content of the page", required = True)
-    parser.add_argument("-p", "--publish", help="IF selected, publish the page on Canvas at the time of creation (default: leave unpublished)", default = False)
+    parser.add_argument("-p", "--publish", help="IF selected, publish the page on Canvas at the time of creation (default: leave unpublished)", action='store_true')
     parser.add_argument("-cf", "--config_file", help="Path to config file", default = '~/.config/canvasapi.conf')
     args = parser.parse_args(args)
     return args
