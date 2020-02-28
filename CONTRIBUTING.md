@@ -2,7 +2,7 @@
 
 I welcome contributions! In order for you to help develop this software:
 
-* you will need to install [canvasAPI](https://canvasapi.readthedocs.io/en/latest/)
+* you will need to install [canvasAPI](https://canvasapi.readthedocs.io/en/latest/) and [pathlib](https://pypi.org/project/pathlib/)
 * ideally, have a Canvas account available to try out the commands
     - for example, a dummy or sandbox course or a course where you can add some pages, files and modules
 * get the [Canvas API key](https://community.canvaslms.com/docs/DOC-14409-4214861717) of your try-out course. and set up the config file as described in the README
