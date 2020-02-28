@@ -48,7 +48,7 @@ def main(args):
             "page_url": page_to_add.url
             })
         print("Sucessfully added page '%s' to module '%s'." %(page_name, args.module_name))
-    except Exception, e:
+    except Exception as e:
         sys.exit("Could not add page '%s' to module '%s':\n%s." %(page_name, args.module_name, str(e)))
 
 if __name__ == "__main__":

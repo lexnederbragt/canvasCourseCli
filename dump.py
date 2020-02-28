@@ -31,8 +31,9 @@ def main(args):
     #########
     pages = []
     destination_path = Path('pages/')
-    if not destination_path.exists():
-        destination_path.mkdir(parents=True) # cannot use `exists_ok = True`
+    # create folder if needed
+    destination_path.mkdir(parents=True, exist_ok = True)
+
     for page in course.get_pages():
         destination_file = "pages/" + page.url + ".html"
         print("Downloading page '" + page.title + "' to " + destination_file)
@@ -42,7 +43,7 @@ def main(args):
         if not page_content:
             page_content = ''
         with open(destination_file, 'w') as fh_out:
-            fh_out.write(page_content.encode('utf-8'))
+            fh_out.write(page_content)
 
     #########
     # files #

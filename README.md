@@ -12,8 +12,7 @@ A Python-based command-line tool for adding, retrieving and updating content on 
 
 ## Dependencies
 
-Depends on [canvasAPI](https://canvasapi.readthedocs.io/en/latest/)
-(and thus uses Python 2), and [pathlib](https://pypi.org/project/pathlib/).
+Depends on [canvasAPI](https://canvasapi.readthedocs.io/en/latest/) and [pathlib](https://pypi.org/project/pathlib/).
 
 ## Configuration file
 Requires a configuration file with a [Canvas API key](https://community.canvaslms.com/docs/DOC-14409-4214861717). Default config file is `~/.config/canvasapi.conf`, but this can be changed when calling the tool.
@@ -72,7 +71,7 @@ To create a new folder:
 cvupdate.py create_folder -u https://instance.instructure.com/courses/9999/files/folder/name-of-folder
 ```
 
-To add a new file, or overwite an existing one with the same name:
+To add a new file, or overwrite an existing one with the same name:
 ```
 cvupdate.py add_file -u https://instance.instructure.com/courses/9999/files/folder/name-of-folder/name-of-file -f name-of-file.pdf
 ```
