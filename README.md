@@ -27,7 +27,7 @@ Depends on
 Requires a configuration file with a [Canvas API key](https://community.canvaslms.com/docs/DOC-14409-4214861717). The default config file is `~/.config/canvasapi.conf`, but this can be changed when calling the tool.
 
 The config file should have this structure with at least one pair of
-* a base url, enclosed in square brackets, similar to `[https://instance.instructure.com/courses/9999]`
+* a base url, enclosed in square brackets, similar to `[https://instance.instructure.com]`
 * the corresponding API key, something like `api_key = rpLoM9Yc62Qzv$JLswq4E#70....M1q&$B9hSFPA`
 
 
@@ -108,6 +108,6 @@ If you have a Canvas course instance you don't mind using, executing the shell s
 ## Why I developed this
 
 I wanted to be able to use the command line to view, add and update content on Canvas. For example:
-* write pages for Canvas in Markdown, put these under version control, and use a Makefile to automatically convert them to html (using pandoc) and add or update them on the course's Canvas instance
+* write pages for Canvas in Markdown, put these under version control, and use a Makefile to automatically convert them to html (using [pandoc](https://pandoc.org)) and add or update them on the course's Canvas instance
 * send files to Canvas from the command line
 * add pages to modules
