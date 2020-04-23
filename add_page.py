@@ -20,6 +20,14 @@ def parse_args(args):
     args = parser.parse_args(args)
     return args
 
+def create_page(course, title, html_content, published):
+    new_page = course.create_page(wiki_page = {
+        "title":title,
+        "body":html_content,
+        "published":published
+        })
+    return new_page
+
 def main(args):
     args = parse_args(args)
 
@@ -37,11 +45,7 @@ def main(args):
         html_content = html_file.read()#.replace('\n', '')
 
     # update the course page
-    new_page = course.create_page(wiki_page = {
-        "title":args.title,
-        "body":html_content,
-        "published":published
-        })
+    new_page = create_page(course, args.title, html_content, published)
     print("Sucessfully added page '%s'. Full url: '%s'." \
         %(new_page.title, API_URL + '/courses/' + course_id + '/pages/' + new_page.url))
 
