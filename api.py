@@ -121,6 +121,19 @@ def find_module(course, module_name):
         if module.name == module_name:
             return module
 
+def page_exists(course, page_name):
+    """
+    Tests whether a page exists for a course
+    The page url is everything following the 'pages/' in the pages's URL:
+
+    'page_name' in the case of this URL
+    https://canvas.instance.com/courses/course_id/pages/page_name
+    """
+    for page in course.get_pages():
+        if page.url == page_name:
+            return True
+    return False
+
 def strip_folder_name(long_folder_name):
     """
     Removes leading '"course files/' from folder 'path'
