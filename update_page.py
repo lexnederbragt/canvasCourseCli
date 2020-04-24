@@ -1,6 +1,6 @@
 import sys
 import argparse
-from api import get_course, split_url
+from api import get_course, split_url, page_exists
 
 def parse_args(args):
     # help text and argument parser
@@ -28,17 +28,21 @@ def main(args):
     with open(args.html_file, 'r') as html_file:
         html_content = html_file.read()#.replace('\n', '')
 
-    # get the course page
-    try:
+    # test whether page exists
+    if page_exists(course, page_name):
         page_to_update = course.get_page(page_name)
-    except:
-        sys.exit("Error: could not find page '%s' on Canvas for updating.\nFull url: %s" % (page_name, args.url))
+    else:
+        message ="Error: could not find page '{}' on Canvas for updating.\nFull url: {}".format(page_name, args.url)
+        sys.exit(message)
 
     # Get current revision
     old_rev = page_to_update.get_revisions()[0]
 
     # update the course page
-    api_call_result = page_to_update.edit(wiki_page = {"title":page_to_update.title, "body":html_content})
+    api_call_result = page_to_update.edit(wiki_page = {
+        "title":page_to_update.title,
+        "body":html_content
+        })
 
     # testing whether the update has happened
     # in which case the revision has changed
