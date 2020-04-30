@@ -1,6 +1,6 @@
 import sys
 import argparse
-from api import get_course, split_url
+from api import get_course, split_url, page_exists
 
 def parse_args(args):
     # help text and argument parser
@@ -15,7 +15,8 @@ def parse_args(args):
     required_named.add_argument("-t", "--title", help="The title the page to be added, enclosed in quotation marks if it \
     contains one or more spaces. Note that the url of the page will be the title in lower case, with each space replaced by a dash", required = True)
     required_named.add_argument("-f", "--html_file", help="The path to the html file that contains the content of the page", required = True)
-    parser.add_argument("-p", "--publish", help="IF selected, publish the page on Canvas at the time of creation (default: leave unpublished)", action='store_true')
+    parser.add_argument("-p", "--publish", help="Publish the page on Canvas at the time of creation (default: leave unpublished)", action='store_true')
+    parser.add_argument("--force", help="If the page is already present, create the page anyway (default: off)", action='store_true')
     parser.add_argument("-cf", "--config_file", help="Path to config file", default = '~/.config/canvasapi.conf')
     args = parser.parse_args(args)
     return args
@@ -39,6 +40,14 @@ def main(args):
     # extract course information from url and get course
     API_URL, course_id, new_page_name = split_url(args.url, expected = 'new page')
     course =  get_course(API_URL, course_id, args.config_file)
+
+    # test whether page exists
+    new_page_name = args.title.lower().replace(" ","-")
+    if page_exists(course, new_page_name) and not args.force:
+        message ="Error: page '{}' already exists on Canvas.\n".format(new_page_name)
+        message += "Full url: {}\n".format(args.url)
+        message += "To create anyway, use '--force'\n"
+        sys.exit(message)
 
     # read new page content
     with open(args.html_file, 'r') as html_file:
