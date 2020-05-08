@@ -134,6 +134,10 @@ def page_exists(course, page_name):
             return True
     return False
 
+def module_exists(course, page_name):
+    # Not implemented yet
+    return False
+
 def strip_folder_name(long_folder_name):
     """
     Removes leading '"course files/' from folder 'path'

@@ -16,6 +16,15 @@ def parse_args(args):
     args = parser.parse_args(args)
     return args
 
+def get_module_url(module_items_url):
+    """
+    Extracts the module direct url from the items_url.
+    Example:
+    items_url https://canvas.instance.com/api/v1/courses/course_id/modules/module_id/items'
+    becomes https://canvas.instance.com/courses/course_id/modules/module_id
+    """
+    return module_items_url.replace('api/v1/','').replace('/items', '')
+
 def main(args):
     args = parse_args(args)
 
@@ -25,7 +34,7 @@ def main(args):
 
     modules = {}
     for module in course.get_modules():
-        module_url = module.items_url.replace('api/v1/','').replace('/items', '')
+        module_url = get_module_url(module.items_url)
         modules[module.position] = { "name" : module.name,
                                     "items" : module_url
                                     }
