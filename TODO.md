@@ -10,6 +10,9 @@
 * improve handling of exceptions (the current `try - except` solution is probably not good practice)
 * add flag for `dump.py` to only download pages or only files
 * add flag for `dump.py` to do a dry run
+* add_module
+  - enable publishing module
+  - enable checking whether module of same name already exists, do not add unless `--force`
 * consider adding commands to delete pages, files and folders, and remove items from modules
 * add more tests
 * turn into a Python package
