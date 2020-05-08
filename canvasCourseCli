@@ -12,6 +12,7 @@ import list_files
 import dump
 import create_folder
 import add_file
+import list_modules
 import add_to_module
 
 # modelled after _ _ main _ _.py from
@@ -34,6 +35,7 @@ Available:
     create_folder -u URL                        Create a new folder on Canvas.
     add_file      -u URL -f FILE_TO_SEND        Add a file to a folder on Canvas.
     update_page   -u URL -f HTML_FILE           Update the content of a page on Canvas.
+    list_modules  -u URL                        List all modules for a course on Canvas.
     add_to_module -u URL -m MODULE_NAME         Add a page on Canvas to a module.
 
 To get help on individual commands: canvasCourseCli <command> -h
@@ -50,6 +52,7 @@ To get help on individual commands: canvasCourseCli <command> -h
             'dump': dump.main,
             'create_folder': create_folder.main,
             'add_file': add_file.main,
+            'list_modules': list_modules.main,
             'add_to_module': add_to_module.main
         }
 
