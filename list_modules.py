@@ -36,11 +36,13 @@ def main(args):
     for module in course.get_modules():
         module_url = get_module_url(module.items_url)
         modules[module.position] = { "name" : module.name,
-                                    "items" : module_url
+                                    "items" : module_url,
+                                    "published" : module.published
                                     }
-    print("Position\tModule name\tModule url")
+    print("Position\tModule name\tModule url\tPublished")
     for position in sorted(modules.keys()):
-         print(f"{position}\t{modules[position]['name']}\t{modules[position]['items']}")
+        module = modules[position]
+        print(f"{position}\t{module['name']}\t{module['items']}\t{module['published']}")
 
 if __name__ == "__main__":
     main(sys.argv[1:])
