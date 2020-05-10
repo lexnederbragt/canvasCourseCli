@@ -134,9 +134,17 @@ def page_exists(course, page_name):
             return True
     return False
 
-def module_exists(course, page_name):
-    # Not implemented yet
-    return False
+def module_exists(course, module_name):
+    """
+    Tests whether a module exists for a course
+    Looks for an existing module of the same name.
+    Returns the 'items_url' of the existing module
+    or an empty string if it does not yet exists.
+    """
+    for module in course.get_modules():
+        if module.name == module_name:
+            return module.items_url
+    return ''
 
 def strip_folder_name(long_folder_name):
     """
