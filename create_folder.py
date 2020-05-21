@@ -16,25 +16,33 @@ def parse_args(args):
     args = parser.parse_args(args)
     return args
 
+def create_folder(course, folder_name, folder_url):
+    """
+    Creates a folder on Canvas
+    """
+    try:
+        new_folder = course.create_folder(folder_name, parent_folder_path = '/')
+        # folder.full_name starts with 'course files/'
+        # trial and error showed I need this to get everything after:
+        # lstrip('course files')[1:]
+        new_folder_name = new_folder.full_name.lstrip('course files')[1:]
+        print(f"Succesfully created folder '{new_folder_name}' on Canvas.")
+        print(f"Full url: {folder_url}")
+        return new_folder
+    except:
+        sys.exit("Error: could not create folder '%s' on Canvas.\nFull url: %s" % (folder_name, args.url))
+
 def main(args):
     args = parse_args(args)
 
     # extract course information from url and get course
-    API_URL, course_id, new_folder_name = split_url(args.url, expected = 'folder')
+    API_URL, course_id, folder_name = split_url(args.url, expected = 'folder')
     course =  get_course(API_URL, course_id, args.config_file)
 
-    if not folder_exists(course, new_folder_name):
-        try:
-            course.create_folder(new_folder_name, parent_folder_path = '/')
-            print("Succesfully created folder '%s' on Canvas." % new_folder_name)
-            print("Full url: %s" % args.url)
-        except:
-            sys.exit("Error: could not create folder '%s' on Canvas.\nFull url: %s" % (new_folder_name, args.url))
+    if not folder_exists(course, folder_name):
+        new_folder = create_folder(course, folder_name, args.url)
     else:
-        sys.exit("Error: folder '%s' already exists on Canvas.\nFull url: %s" % (new_folder_name, args.url))
-
-
-
+        sys.exit("Error: folder '%s' already exists on Canvas.\nFull url: %s" % (folder_name, args.url))
 
 if __name__ == "__main__":
     main(sys.argv[1:])
