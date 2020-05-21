@@ -1,6 +1,7 @@
 import sys
 import argparse
 from api import get_course, split_url, page_exists
+from add_page import create_page
 
 def parse_args(args):
     # help text and argument parser
@@ -13,6 +14,11 @@ def parse_args(args):
     required_named = parser.add_argument_group('required named arguments')
     required_named.add_argument("-u", "--url", help="The full url of the page to be updated", required = True)
     required_named.add_argument("-f", "--html_file", help="The path to the html file that will be sent to Canvas", required = True)
+    parser.add_argument("--create", help="If the page does not exist yet, \
+    add; requires -t/--title (default: off, and warn instead)", action='store_true')
+    required_named.add_argument("-t", "--title", help="The title the page, enclosed in quotation marks if it \
+    contains one or more spaces. Needed when the page is also to be added. Note that the url of the page will be the title in lower case, with each space replaced by a dash", required = True)
+    parser.add_argument("-p", "--publish", help="Publish the page on Canvas at the time of creation (default: leave unpublished)", action='store_true')
     parser.add_argument("-cf", "--config_file", help="Path to config file", default = '~/.config/canvasapi.conf')
     args = parser.parse_args(args)
     return args
@@ -32,8 +38,17 @@ def main(args):
     if page_exists(course, page_name):
         page_to_update = course.get_page(page_name)
     else:
-        message ="Error: could not find page '{}' on Canvas for updating.\nFull url: {}".format(page_name, args.url)
-        sys.exit(message)
+        message =f"Could not find page '{page_name}' on Canvas for updating.\n"
+        # FIXME add message about --create
+        if args.create:
+            new_page = create_page(course, args.title, html_content, args.publish)
+            message += "Sucessfully added page '%s'. Full url: '%s'." \
+            %(new_page.title, API_URL + '/courses/' + course_id + '/pages/' + new_page.url)
+            sys.exit(message)
+        else:
+            message = "Error: " + message
+            message += f"Full url: '{args.url}'\n"
+            sys.exit(message)
 
     # Get current revision
     old_rev = page_to_update.get_revisions()[0]
