@@ -2,6 +2,7 @@ import sys
 import argparse
 import os.path
 from api import get_course, split_url, find_folder
+from create_folder import create_folder
 
 def parse_args(args):
     # help text and argument parser
@@ -14,6 +15,8 @@ def parse_args(args):
     required_named = parser.add_argument_group('required named arguments')
     required_named.add_argument("-u", "--url", help="The full url of the folder where the file will be uploaded to.", required = True)
     required_named.add_argument("-f", "--file_to_send", help="The path to the file that will be uploaded to Canvas", required = True)
+    parser.add_argument("--create", help="If the destination folder does not yet exists, \
+    create it before adding the file (default: off, and warn instead)", action='store_true')
     parser.add_argument("-cf", "--config_file", help="Path to config file", default = '~/.config/canvasapi.conf')
     args = parser.parse_args(args)
     return args
@@ -32,7 +35,12 @@ def main(args):
     # find the folder
     folder = find_folder(course, folder_name)
     if not folder:
-        sys.exit("Could not find folder '%s'. Full url: %s" %(folder_name, args.url))
+        if not args.create:
+            message = f"Could not find folder '{folder_name}'. Full url: {args.url}.\n"
+            message += "Use --create to create the folder before adding the file."
+            sys.exit(message)
+        else:
+            folder = create_folder(course, folder_name, args.url)
 
     # do the upload and capture the return
     result = folder.upload(args.file_to_send)
