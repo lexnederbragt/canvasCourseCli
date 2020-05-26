@@ -38,7 +38,7 @@ def main(args):
         published = 'true'
 
     # extract course information from url and get course
-    API_URL, course_id, new_page_name = split_url(args.url, expected = 'new page')
+    API_URL, course_id, new_page_name = split_url(args.url, expected = 'url only')
     course =  get_course(API_URL, course_id, args.config_file)
 
     # test whether page exists
