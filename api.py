@@ -4,10 +4,10 @@ import re
 from canvasapi import Canvas
 from canvasapi import page
 
-def split_url(url, expected):
+def split_url(url, expected = None):
     """
     Retrieve API url, course id from full URL
-    Determine url type and compare to expected
+    Determine url type and optionally compare to expected
     Current url types: folder name, page name, url only
 
     Example URL:
@@ -20,36 +20,36 @@ def split_url(url, expected):
     """
 
     # split the url
-    if expected in ['page', 'folder']:
-        none, API_URL, course_id, rest, none = re.split(r'(.*)/courses/(\d*)/(.*)', url)
-    elif expected in ['new page', 'url only']:
-        none, API_URL, course_id, none = re.split(r'(.*)/courses/(\d*)', url)
-        rest = 'course url'
-    else:
-        sys.exit("Expected url type not implemented yet: " + expected)
+    none, API_URL, course_id, rest, none = re.split(r'(.*)/courses/(\d*)(.*)', url)
 
     # determine type
-    if rest.startswith('pages/'):
+    if rest.startswith('/pages/'):
         url_type = 'page'
-        item_name = re.sub(r'^pages/', '', rest)
-    elif rest.startswith('files/folder/'):
+        item_name = re.sub(r'^/pages/', '', rest)
+    elif rest.startswith('/files/folder/'):
         url_type = 'folder'
-        item_name = re.sub(r'^files/folder/', '', rest)
-    elif rest == 'course url' and expected == 'new page':
-        url_type = 'new page'
-        item_name = ''
-    elif rest == 'course url' and expected == 'url only':
+        item_name = re.sub(r'^/files/folder/', '', rest)
+    elif rest == '':
         url_type = 'url only'
         item_name = ''
     else:
         sys.exit("Unexpected url: not of type 'folder' or 'page' " + url)
 
-    # compare to expected
-    if url_type != expected:
-        sys.exit("Unexpected type url: expected url of type '%s', got type '%s': " \
-        %(expected, url_type) + url)
-
-    return API_URL, course_id, item_name
+    # return value depends on whether a certain type was expected
+    if expected:
+        # check validity of expected result
+        if not expected in ['page', 'folder', 'url only']:
+            sys.exit("Expected url type not implemented yet: " + expected)
+        elif url_type != expected:
+            # compare result with expected
+            sys.exit("Unexpected type url: expected url of type '%s', got type '%s': " \
+            %(expected, url_type) + url)
+        else:
+            # all is good, return data
+            return API_URL, course_id, item_name
+    else:
+        # no particular url type was expected, so add it to what is returned
+        return API_URL, course_id, item_name, url_type
 
 def get_API(config_file_name, API_URL):
     """
