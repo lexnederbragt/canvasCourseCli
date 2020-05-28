@@ -20,6 +20,21 @@ def test_url_folder_no_expected():
     result = split_url(url)
     assert result == ('https://canvas.instance.com', '12345', 'folder_name', 'folder')
 
+def test_url_file_in_subfolder():
+    url = 'https://canvas.instance.com/courses/12345/files/folder/subfolder/file.ext'
+    result = split_url(url, expected = 'file')
+    assert result == ('https://canvas.instance.com', '12345', 'subfolder/file.ext')
+
+def test_url_file():
+    url = 'https://canvas.instance.com/courses/12345/files/folder/file.ext'
+    result = split_url(url, expected = 'file')
+    assert result == ('https://canvas.instance.com', '12345', 'file.ext')
+
+def test_url_file_no_expected():
+    url = 'https://canvas.instance.com/courses/12345/files/folder/file.name'
+    result = split_url(url)
+    assert result == ('https://canvas.instance.com', '12345', 'file.name', 'file')
+
 def test_url_only():
     url = 'https://canvas.instance.com/courses/12345'
     result = split_url(url, expected = 'url only')

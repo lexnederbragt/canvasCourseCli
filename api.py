@@ -8,7 +8,8 @@ def split_url(url, expected = None):
     """
     Retrieve API url, course id from full URL
     Determine url type and optionally compare to expected
-    Current url types: folder name, page name, url only
+    Current url types: folder name, file name, page name, url only
+    Assumes only files have a dot in their name, not folders
 
     Example URL:
     https://canvas.instance.com/courses/course_id/pages/page_name
@@ -17,9 +18,11 @@ def split_url(url, expected = None):
     * course ID: course_id
     * page name: page_name
     * folder name: folder_name
+    * file name: file.ext
     """
 
     # split the url
+    # rest: the part following 'course_id'
     none, API_URL, course_id, rest, none = re.split(r'(.*)/courses/(\d*)(.*)', url)
 
     # determine type
@@ -27,18 +30,24 @@ def split_url(url, expected = None):
         url_type = 'page'
         item_name = re.sub(r'^/pages/', '', rest)
     elif rest.startswith('/files/folder/'):
-        url_type = 'folder'
+        # file or folder
+        # files have a . in their name
+        remainder = re.split(r'/files/folder/(.*\..*)', rest)
+        if len(remainder) == 3:
+            url_type = 'file'
+        else:
+            url_type = 'folder'
         item_name = re.sub(r'^/files/folder/', '', rest)
     elif rest == '':
         url_type = 'url only'
         item_name = ''
     else:
-        sys.exit("Unexpected url: not of type 'folder' or 'page' " + url)
+        sys.exit("Unexpected url: not of type 'file', 'folder' or 'page' " + url)
 
     # return value depends on whether a certain type was expected
     if expected:
         # check validity of expected result
-        if not expected in ['page', 'folder', 'url only']:
+        if not expected in ['page', 'folder', 'file', 'url only']:
             sys.exit("Expected url type not implemented yet: " + expected)
         elif url_type != expected:
             # compare result with expected

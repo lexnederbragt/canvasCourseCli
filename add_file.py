@@ -29,7 +29,7 @@ def main(args):
         sys.exit("Error: could not find file '%s'" % args.file_to_send)
 
     # extract course information from url and get course
-    API_URL, course_id, folder_name = split_url(args.url, expected = 'folder')
+    API_URL, course_id, folder_name = split_url(args.url, expected = 'file')
     course =  get_course(API_URL, course_id, args.config_file)
 
     # find the folder
