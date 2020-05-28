@@ -1,7 +1,7 @@
 import sys
 import argparse
 import os.path
-from api import get_course, split_url, find_module
+from api import get_course, split_url, find_module, page_exists, get_file
 from add_module import create_module, get_module_url, publish_module
 
 def parse_args(args):
@@ -30,59 +30,104 @@ def parse_args(args):
     return args
 
 
-def page_is_added_to_module(module, page):
+def item_is_added_to_module(module, item, item_id,  url_type):
     """
-    Tests whether a page has already been added to a module
+    Tests whether an item has already been added to a module
+    item is a page or a file.
     """
     for module_item in module.get_module_items():
-        if module_item.title == page.title:
-            return True
+        # module_item.type is capitalised
+        module_item_type = module_item.type.lower()
+        # only compare items of same type
+        if module_item_type == url_type:
+            if module_item_type == 'page':
+                # pages have a unique title
+                module_item_id = module_item.title
+                # compare the IDs
+                if module_item.title == item_id:
+                    return True
+            else:
+                # files have a unique ID,
+                # which for a file in a module is the content_id
+                module_item_id = module_item.content_id
+                # compare the IDs
+                if module_item_id == item_id:
+                    return True
     return False
 
 def main(args):
     args = parse_args(args)
 
     # extract course information from url and get course
-    API_URL, course_id, page_name = split_url(args.url, expected = 'page')
+    API_URL, course_id, item_name, url_type = split_url(args.url)
+
     course =  get_course(API_URL, course_id, args.config_file)
 
-    # check whether page to add actually exists
-    try:
-        page_to_add = course.get_page(page_name)
-    except:
-        sys.exit("Error: could not find page '%s' on Canvas.\nFull url: %s" % (page_name, args.url))
+    if url_type == 'page':
+        # check whether page to add actually exists
+        # if so, get it
+        if page_exists(course, item_name):
+            item_to_add = course.get_page(item_name)
+            # pages have a unique title
+            item_id = item_to_add.title
+        else:
+            sys.exit("Error: could not find page '%s' on Canvas.\nFull url: %s" % (item_name, args.url))
 
+    elif url_type == 'file':
+        # get file to add if it actually exists
+        # if not, becomes False
+        item_to_add = get_file(course, item_name)
+        if not item_to_add:
+            sys.exit("Error: could not find file '%s' on Canvas.\nFull url: %s" % (item_name, args.url))
+        # files have a unique ID
+        item_id = item_to_add.id
+    else:
+        sys.exit(f"Error: unexpected type of item to add: '{url_type}', expected 'file' or 'page': {args.url}")
+
+    module_name = args.title
     # find the module
-    module = find_module(course, args.title)
+    module = find_module(course, module_name)
     if not module:
         # module does not exist
         if not args.create:
-            sys.exit("Could not find module '%s' on Canvas" % args.title)
+            sys.exit("Could not find module '%s' on Canvas" % module_name)
         else:
             # create module, publish if requested
-            module = create_module(course, args.title)
+            module = create_module(course, module_name)
             module_url = get_module_url(module.items_url)
             print(f"Sucessfully added module '{module.name}'. Full url: {module_url}.")
             if args.publish:
                 publish_module(module)
 
-    # check whether page already added to module
-    if page_is_added_to_module(module, page_to_add) and not args.force:
-        message = f"Page '{page_to_add.title}' "
-        message += f"already added to module '{module.name}'.\n"
-        message += "To add anyway, use '--force'\n"
-        sys.exit(message)
+    if url_type in ['page', 'file']:
+        # check whether page already added to module
+        if item_is_added_to_module(module, item_to_add, item_id, url_type) and not args.force:
+            message = f"Error: {url_type} '{item_name}' "
+            message += f"already added to module '{module.name}'.\n"
+            message += "To add anyway, use '--force'\n"
+            sys.exit(message)
 
     # update the module
-    try:
-        new_module_item = module.create_module_item(module_item = {
-            "type":"Page",
-            "content_id":"",
-            "page_url": page_to_add.url
-            })
-        print("Sucessfully added page '%s' to module '%s'." %(page_name, args.title))
-    except Exception as e:
-        sys.exit("Could not add page '%s' to module '%s':\n%s." %(page_name, args.title, str(e)))
+    if url_type == 'page':
+        try:
+            new_module_item = module.create_module_item(module_item = {
+                "type":"Page",
+                "content_id":"",
+                "page_url": item_to_add.url
+                })
+            print("Sucessfully added page '%s' to module '%s'." %(item_name, module_name))
+        except Exception as e:
+            sys.exit("Could not add page '%s' to module '%s':\n%s." %(item_name, module_name, str(e)))
+
+    if url_type == 'file':
+        try:
+            new_module_item = module.create_module_item(module_item = {
+                "type":"File",
+                "content_id":item_to_add.id,
+                })
+            print("Sucessfully added file '%s' to module '%s'." %(item_name, module_name))
+        except Exception as e:
+            sys.exit("Could not add file '%s' to module '%s':\n%s." %(item_name, module_name, str(e)))
 
 if __name__ == "__main__":
     main(sys.argv[1:])

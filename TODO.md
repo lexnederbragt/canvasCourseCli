@@ -9,9 +9,8 @@
 * add flag for `dump.py` to only download pages or only files
 * add flag for `dump.py` to do a dry run
 * add_module
-  - enable publishing module
-  - enable checking whether module of same name already exists, do not add unless `--force`
-  - enable adding any item (add_to_module can figure out file versus folder and adjust accordingly)
+  - document well the file url (https://canvas.instance.com/courses/12345/files/folder/subfolder/file.ext, this is not an existing url...)
+  - open for other file urls (https://canvas.instance.com/courses/12345/files/67890/download?download_frd=1, https://canvas.instance.com/courses/12345/files/folder/subfolder?preview=67890, others?)
 * consider adding commands to delete pages, files and folders, and remove items from modules
 * add more tests
 * turn into a Python package
