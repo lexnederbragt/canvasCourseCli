@@ -143,6 +143,33 @@ def page_exists(course, page_name):
             return True
     return False
 
+def get_file(course, file_name):
+    """
+    Finds and returns file for a course.
+    Returns False if file not found.
+    The file name is everything following the 'files/folder/' in the pages's URL:
+
+    'file.ext' in the case of this URL
+    https://canvas.instance.com/courses/12345/files/folder/file.ext
+
+    'subfolder/file.ext' in the case of this URL
+    https://canvas.instance.com/courses/12345/files/folder/subfolder/file.ext
+    """
+    for folder in course.get_folders():
+        # remove leading '"course files/' from path
+        folder_name = strip_folder_name(folder.full_name)
+        # place files in a folder called 'files'
+        path = '' # emoty for filses in the root folder
+        if folder_name != '':
+            # subfolder, add name + a trailing '/' to path
+            path += folder_name + "/"
+        # download all files in this folder
+        for file in folder.get_files():
+            if path + file.display_name == file_name:
+                return file
+    # file not found
+    return False
+
 def module_exists(course, module_name):
     """
     Tests whether a module exists for a course
