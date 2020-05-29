@@ -29,17 +29,20 @@ def main(args):
         sys.exit("Error: could not find file '%s'" % args.file_to_send)
 
     # extract course information from url and get course
-    API_URL, course_id, folder_name = split_url(args.url, expected = 'file')
+    API_URL, course_id, folder_name = split_url(args.url, expected = 'folder')
     course =  get_course(API_URL, course_id, args.config_file)
 
     # find the folder
     folder = find_folder(course, folder_name)
     if not folder:
+        message = f"Could not find folder '{folder_name}'\n"
         if not args.create:
-            message = f"Could not find folder '{folder_name}'. Full url: {args.url}.\n"
-            message += "Use --create to create the folder before adding the file."
+            message += "Use --create to create the folder before adding the file.\n"
+            message += f"Full url: {args.url}"
             sys.exit(message)
         else:
+            message += "Will attempt to create the folder."
+            print(message)
             folder = create_folder(course, folder_name, args.url)
 
     # do the upload and capture the return

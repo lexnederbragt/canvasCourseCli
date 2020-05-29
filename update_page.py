@@ -16,8 +16,8 @@ def parse_args(args):
     required_named.add_argument("-f", "--html_file", help="The path to the html file that will be sent to Canvas", required = True)
     parser.add_argument("--create", help="If the page does not exist yet, \
     add; requires -t/--title (default: off, and warn instead)", action='store_true')
-    required_named.add_argument("-t", "--title", help="The title the page, enclosed in quotation marks if it \
-    contains one or more spaces. Needed when the page is also to be added. Note that the url of the page will be the title in lower case, with each space replaced by a dash", required = True)
+    parser.add_argument("-t", "--title", help="The title the page, enclosed in quotation marks if it \
+    contains one or more spaces. Needed when the page is also to be added. Note that the url of the page will be the title in lower case, with each space replaced by a dash", required = False)
     parser.add_argument("-p", "--publish", help="Publish the page on Canvas at the time of creation (default: leave unpublished)", action='store_true')
     parser.add_argument("-cf", "--config_file", help="Path to config file", default = '~/.config/canvasapi.conf')
     args = parser.parse_args(args)
@@ -36,37 +36,47 @@ def main(args):
 
     # test whether page exists
     if page_exists(course, page_name):
+        # page does exist
         page_to_update = course.get_page(page_name)
+        # Get current revision
+        old_rev = page_to_update.get_revisions()[0]
+
+        # update the course page
+        api_call_result = page_to_update.edit(wiki_page = {
+            "title":page_to_update.title,
+            "body":html_content
+            })
+
+        # testing whether the update has happened
+        # in which case the revision has changed
+        new_rev = page_to_update.get_revisions()[0]
+        if str(new_rev) != str(old_rev):
+            print("Successfully updated page "+ args.url + " to revision '" + str(new_rev) + "'")
+        else:
+            print("The API call was succesful, but the page %s appears not to have recieved a new revision number." % args.url)
+            print("This could mean the current content is identical to the html file provided.")
     else:
+        # page does not exist
         message =f"Could not find page '{page_name}' on Canvas for updating.\n"
-        # FIXME add message about --create
         if args.create:
+            # check that title is given
+            if not args.title:
+                message += "Could not create page as title is missing.\n"
+                message += "Use -t/--title to in addition to --create to create the page."
+                sys.exit(message)
+            message += "Will attempt to create the page."
+            print(message)
             new_page = create_page(course, args.title, html_content, args.publish)
-            message += "Sucessfully added page '%s'. Full url: '%s'." \
+            message = "Sucessfully added page '%s'.\nFull url: '%s'." \
             %(new_page.title, API_URL + '/courses/' + course_id + '/pages/' + new_page.url)
-            sys.exit(message)
+            print(message)
         else:
             message = "Error: " + message
             message += f"Full url: '{args.url}'\n"
+            message += "Use --create to create the page before adding the file.\n"
+            message += "Note that this requires the use of -t/--title."
             sys.exit(message)
 
-    # Get current revision
-    old_rev = page_to_update.get_revisions()[0]
-
-    # update the course page
-    api_call_result = page_to_update.edit(wiki_page = {
-        "title":page_to_update.title,
-        "body":html_content
-        })
-
-    # testing whether the update has happened
-    # in which case the revision has changed
-    new_rev = page_to_update.get_revisions()[0]
-    if str(new_rev) != str(old_rev):
-        print("Successfully updated page "+ args.url + " to revision '" + str(new_rev) + "'")
-    else:
-        print("The API call was succesful, but the page %s appears not to have recieved a new revision number." % args.url)
-        print("This could mean the current content is identical to the html file provided.")
 
 if __name__ == "__main__":
     main(sys.argv[1:])
