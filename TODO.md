@@ -1,4 +1,16 @@
-# TO DO
+## Changes since version 0.1:
+* new commands
+  * add_module
+  * list_modules
+* when creating a new page or module, refuse when page already exist
+* when adding an item to a module, refuse when it already present
+* added --force
+* added --create
+* added --publish
+* can now also files to a module
+* some code reorganisation and refactoring
+
+## TO DO
 * enable use of shortname for a course instead of full url
 * enable sending a file to the root folder
 * enable modifying the course homepage
