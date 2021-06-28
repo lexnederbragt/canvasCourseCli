@@ -24,6 +24,8 @@ def parse_args(args):
     at the time of creation (default: leave unpublished)", action='store_true')
     parser.add_argument("--force", help="If the page has already been added, \
     add it another time to the module anyway (default: off)", action='store_true')
+    parser.add_argument("--ignore", help="If the page has already been added, \
+    ignore this fact and exit without error (default: off)", action='store_true')
     parser.add_argument("-cf", "--config_file", help="Path to config file", \
         default = '~/.config/canvasapi.conf')
     args = parser.parse_args(args)
@@ -101,11 +103,18 @@ def main(args):
 
     if url_type in ['page', 'file']:
         # check whether page already added to module
-        if item_is_added_to_module(module, item_to_add, item_id, url_type) and not args.force:
-            message = f"Error: {url_type} '{item_name}' "
-            message += f"already added to module '{module.name}'.\n"
-            message += "To add anyway, use '--force'\n"
-            sys.exit(message)
+        if item_is_added_to_module(module, item_to_add, item_id, url_type):
+            if not args.force and not args.ignore:
+                message = f"Error: {url_type} '{item_name}' "
+                message += f"already added to module '{module.name}'.\n"
+                message += "To add anyway, use '--force'\n"
+                sys.exit(message)
+            elif args.ignore:
+                message = f"Warning: {url_type} '{item_name}' "
+                message += f"already added to module '{module.name}'.\n"
+                message += "Ignoring...\n"
+                print(message)
+                sys.exit(0)
 
     # update the module
     if url_type == 'page':
