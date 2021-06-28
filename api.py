@@ -33,11 +33,13 @@ def split_url(url, expected = None):
         # file or folder
         # files have a . in their name
         remainder = re.split(r'/files/folder/(.*\..*)', rest)
-        if len(remainder) == 3:
+        # if the url ends in 'folder/.' then remainder will be ['', '.', '']
+        # parse this as a folder (the 'root' folder)
+        if len(remainder) == 3 and remainder != ['', '.', '']:
             url_type = 'file'
         else:
             url_type = 'folder'
-        item_name = re.sub(r'^/files/folder/', '', rest)
+        item_name = re.sub(r'^/files/folder/', '', rest) # this becomes '.' for root
     elif rest == '':
         url_type = 'url only'
         item_name = ''
