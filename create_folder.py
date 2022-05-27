@@ -26,7 +26,7 @@ def create_folder(course, folder_name, folder_url):
         # trial and error showed I need this to get everything after:
         # lstrip('course files')[1:]
         new_folder_name = new_folder.full_name.lstrip('course files')[1:]
-        print(f"Succesfully created folder '{new_folder_name}' on Canvas.")
+        print(f"Successfully created folder '{new_folder_name}' on Canvas.")
         print(f"Full url: {folder_url}")
         return new_folder
     except:

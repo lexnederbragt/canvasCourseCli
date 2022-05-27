@@ -51,7 +51,7 @@ def main(args):
     if result[0]:
         # extract file id from API call results
         file_id = result[1]['id']
-        print("Succesfully uploaded file '%s' to folder '%s'.\nFull url: %s" \
+        print("Successfully uploaded file '%s' to folder '%s'.\nFull url: %s" \
         % (args.file_to_send, folder_name, args.url + '/?preview=' + str(file_id)))
 
 
