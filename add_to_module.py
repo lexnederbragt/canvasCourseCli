@@ -20,8 +20,10 @@ def parse_args(args):
         module that will be updated, enclosed in quotation marks if it \
         contains one or more spaces", required = True)
     parser.add_argument("-lt", "--linktitle", help="The title (name) of the link to be added, enclosed in quotation marks if it \
-    contains one or more spaces.", required = True)
-    parser.add_argument("-lu", "--linkurl", help="The URL (hyperlink address) of the link to be added.", required = True)
+    contains one or more spaces.")
+    parser.add_argument("-lu", "--linkurl", help="The URL (hyperlink address) of the link to be added.")
+    parser.add_argument("-ext", "--externaltool", help="Add the URL as an \
+                        External Tool (defaul: add as a regular hyperlink).", action='store_true')
     parser.add_argument("--create", help="If the module does not exist yet, \
     create it before adding the page (default: off, and warn instead)", action='store_true')
     parser.add_argument("-p", "--publish", help="Publish the module on Canvas \
@@ -126,6 +128,7 @@ def main(args):
     # update the module
     if url_type == 'page':
         try:
+            # not sure what to add for content_id but "" works
             new_module_item = module.create_module_item(module_item = {
                 "type" : "Page",
                 "content_id" : "",
@@ -146,12 +149,19 @@ def main(args):
             sys.exit("Could not add file '%s' to module '%s':\n%s." %(item_name, module_name, str(e)))
 
     elif url_type == "url only" and args.linkurl:
+        module_item = {
+            "title" : args.linktitle,
+            "external_url" : args.linkurl,
+            "new_tab" : True,
+            }
+        if args.externaltool:
+            # not sure what to add for content_id but "" works
+            module_item["type"] = "ExternalTool"
+            module_item["content_id"] = ""
+        else:
+            module_item["type"] = "ExternalUrl"
         try:
-            new_module_item = module.create_module_item(module_item = {
-                "type" : "ExternalUrl",
-                "title" : args.linktitle,
-                "external_url" : args.linkurl,
-                })
+            new_module_item = module.create_module_item(module_item = module_item)
             print("Sucessfully added url '%s' with title '%s' to module '%s'." %(args.linkurl, args.linktitle, module_name))
         except Exception as e:
             sys.exit("Could not add url '%s' to module '%s':\n%s." %(args.linkurl, module_name, str(e)))
