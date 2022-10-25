@@ -7,7 +7,8 @@ from add_module import create_module, get_module_url, publish_module
 def parse_args(args):
     # help text and argument parser
     # solution based on https://stackoverflow.com/a/24181138/462692
-    desc = '\n'.join(["Adds an existing file or page on Canvas to a module in the same course.",
+    desc = '\n'.join(["Adds an existing file or page on Canvas, or a hyperlink, \
+                      to a module in the same course.",
                      "An optional argument -c/--config_file can be used with the path to the config file. "
                      "Otherwise the default config file '~/.config/canvasapi.conf' will be used.\n"
                      ])
@@ -18,6 +19,9 @@ def parse_args(args):
     required_named.add_argument("-t", "--title", help="The title (name) of the \
         module that will be updated, enclosed in quotation marks if it \
         contains one or more spaces", required = True)
+    parser.add_argument("-lt", "--linktitle", help="The title (name) of the link to be added, enclosed in quotation marks if it \
+    contains one or more spaces.", required = True)
+    parser.add_argument("-lu", "--linkurl", help="The URL (hyperlink address) of the link to be added.", required = True)
     parser.add_argument("--create", help="If the module does not exist yet, \
     create it before adding the page (default: off, and warn instead)", action='store_true')
     parser.add_argument("-p", "--publish", help="Publish the module on Canvas \
@@ -83,6 +87,9 @@ def main(args):
             sys.exit("Error: could not find file '%s' on Canvas.\nFull url: %s" % (item_name, args.url))
         # files have a unique ID
         item_id = item_to_add.id
+    elif url_type == "url only" and args.linkurl:
+        pass
+        #sys.exit([API_URL, course_id, item_name, url_type, args.linkurl, args.linktitle])
     else:
         sys.exit(f"Error: unexpected type of item to add: '{url_type}', expected 'file' or 'page': {args.url}")
 
@@ -120,23 +127,34 @@ def main(args):
     if url_type == 'page':
         try:
             new_module_item = module.create_module_item(module_item = {
-                "type":"Page",
-                "content_id":"",
+                "type" : "Page",
+                "content_id" : "",
                 "page_url": item_to_add.url
                 })
             print("Sucessfully added page '%s' to module '%s'." %(item_name, module_name))
         except Exception as e:
             sys.exit("Could not add page '%s' to module '%s':\n%s." %(item_name, module_name, str(e)))
 
-    if url_type == 'file':
+    elif url_type == 'file':
         try:
             new_module_item = module.create_module_item(module_item = {
-                "type":"File",
+                "type" : "File",
                 "content_id":item_to_add.id,
                 })
             print("Sucessfully added file '%s' to module '%s'." %(item_name, module_name))
         except Exception as e:
             sys.exit("Could not add file '%s' to module '%s':\n%s." %(item_name, module_name, str(e)))
+
+    elif url_type == "url only" and args.linkurl:
+        try:
+            new_module_item = module.create_module_item(module_item = {
+                "type" : "ExternalUrl",
+                "title" : args.linktitle,
+                "external_url" : args.linkurl,
+                })
+            print("Sucessfully added url '%s' with title '%s' to module '%s'." %(args.linkurl, args.linktitle, module_name))
+        except Exception as e:
+            sys.exit("Could not add url '%s' to module '%s':\n%s." %(args.linkurl, module_name, str(e)))
 
 if __name__ == "__main__":
     main(sys.argv[1:])
