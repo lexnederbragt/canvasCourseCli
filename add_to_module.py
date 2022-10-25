@@ -7,7 +7,7 @@ from add_module import create_module, get_module_url, publish_module
 def parse_args(args):
     # help text and argument parser
     # solution based on https://stackoverflow.com/a/24181138/462692
-    desc = '\n'.join(["Adds an existing page on Canvas to an existing module in the same course.",
+    desc = '\n'.join(["Adds an existing file or page on Canvas to a module in the same course.",
                      "An optional argument -c/--config_file can be used with the path to the config file. "
                      "Otherwise the default config file '~/.config/canvasapi.conf' will be used.\n"
                      ])
