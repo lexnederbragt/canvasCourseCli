@@ -186,7 +186,7 @@ def main(args):
             module_item["type"] = "ExternalUrl"
         try:
             new_module_item = module.create_module_item(module_item = module_item)
-            print("Sucessfully added url '%s' with title '%s' to module '%s'." %(args.linkurl, args.linktitle, module_name))
+            print("Sucessfully added %s '%s' with title '%s' to module '%s'." %(module_item["type"], args.linkurl, args.linktitle, module_name))
         except Exception as e:
             sys.exit("Could not add url '%s' to module '%s':\n%s." %(args.linkurl, module_name, str(e)))
 
