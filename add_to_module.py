@@ -41,7 +41,7 @@ def parse_args(args):
 def item_is_added_to_module(module, item, item_id,  url_type):
     """
     Tests whether an item has already been added to a module
-    item is a page or a file.
+    item is a page, file or hyperlink (ExternalUrl or ExternalTool).
     """
     for module_item in module.get_module_items():
         # module_item.type is capitalised
@@ -54,13 +54,18 @@ def item_is_added_to_module(module, item, item_id,  url_type):
                 # compare the IDs
                 if module_item.title == item_id:
                     return True
+            elif module_item_type in ["externalurl", "externaltool"]:
+                if module_item.title == item or module_item.external_url == item_id:
+                    return True
             else:
+            # FIXME change to elif probably elif module_item_type == 'file':
                 # files have a unique ID,
                 # which for a file in a module is the content_id
                 module_item_id = module_item.content_id
                 # compare the IDs
                 if module_item_id == item_id:
                     return True
+#        else: print(module_item.type.lower(), module_item.title)
     return False
 
 def main(args):
@@ -70,6 +75,10 @@ def main(args):
     API_URL, course_id, item_name, url_type = split_url(args.url)
 
     course =  get_course(API_URL, course_id, args.config_file)
+
+    # find the module, if any
+    module_name = args.title
+    module = find_module(course, module_name)
 
     if url_type == 'page':
         # check whether page to add actually exists
@@ -90,14 +99,12 @@ def main(args):
         # files have a unique ID
         item_id = item_to_add.id
     elif url_type == "url only" and args.linkurl:
+        # ignore existing links till later
         pass
-        #sys.exit([API_URL, course_id, item_name, url_type, args.linkurl, args.linktitle])
     else:
         sys.exit(f"Error: unexpected type of item to add: '{url_type}', expected 'file' or 'page': {args.url}")
 
-    module_name = args.title
-    # find the module
-    module = find_module(course, module_name)
+    # create the module if necessary
     if not module:
         # module does not exist
         if not args.create:
@@ -120,6 +127,23 @@ def main(args):
                 sys.exit(message)
             elif args.ignore:
                 message = f"Warning: {url_type} '{item_name}' "
+                message += f"already added to module '{module.name}'.\n"
+                message += "Ignoring...\n"
+                print(message)
+                sys.exit(0)
+    elif url_type == "url only" and args.linkurl:
+        if args.externaltool:
+            url_type = "externaltool"
+        else:
+            url_type = "externalurl"
+        if item_is_added_to_module(module, item = args.linktitle, item_id = args.linkurl, url_type = url_type):
+            if not args.force and not args.ignore:
+                message = f"Error: URL {args.linkurl} with name '{args.linktitle}' "
+                message += f"already added to module '{module.name}'.\n"
+                message += "To add anyway, use '--force'\n"
+                sys.exit(message)
+            elif args.ignore:
+                message = f"Warning: URL {args.linkurl} with name '{args.linktitle}' "
                 message += f"already added to module '{module.name}'.\n"
                 message += "Ignoring...\n"
                 print(message)
@@ -148,7 +172,7 @@ def main(args):
         except Exception as e:
             sys.exit("Could not add file '%s' to module '%s':\n%s." %(item_name, module_name, str(e)))
 
-    elif url_type == "url only" and args.linkurl:
+    elif url_type in ["externalurl", "externaltool"]:
         module_item = {
             "title" : args.linktitle,
             "external_url" : args.linkurl,
