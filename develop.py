@@ -1,3 +1,6 @@
+# https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.index
+# https://canvasapi.readthedocs.io/en/stable/module-ref.html?highlight=module_item#canvasapi.module.ModuleItem
+
 import sys
 import add_to_module
 
