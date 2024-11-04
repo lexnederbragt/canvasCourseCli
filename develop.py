@@ -6,11 +6,8 @@ import add_to_module
 
 args = []
 args += ['-u', 'https://uio.instructure.com/courses/39661']
-args += ['-lt', 'UiO website']
-args += ['-lu', 'https://www.uio.no']
-args += ['-t','Uke 44 - Kapittel 8: Mutations and DNA']
 
-add_to_module.main(args)
+list_grades.main(args)
 
 sys.exit
 
